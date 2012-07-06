@@ -43,7 +43,7 @@ class Board {
 
 public:
 	Board();
-	Board(vector<Piece> [], side_t, stack<Move>, int[][], int[]);
+	Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int** rookStartCols, int* kingCols);
 
 	bool makeMove(long move);
 	void movePiece(Piece pieceMoving, int toRow, int toCol, MoveNote note);

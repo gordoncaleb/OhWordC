@@ -22,7 +22,7 @@ public:
 	static RNGTable getSingleton();
 	long randomLong();
 	void generatePiecePerSquare();
-	long getPiecePerSquareRandom(Side player, PieceID id, int row, int col);
+	long getPiecePerSquareRandom(side_t player, PieceID id, int row, int col);
 	void generateBlackToMove();
 	long getBlackToMoveRandom();
 	void generateCastlingRights();

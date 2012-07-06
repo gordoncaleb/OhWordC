@@ -23,6 +23,7 @@ class Piece {
 	PieceID id;
 
 public:
+	Piece();
 	Piece(PieceID, side_t, int, int, bool);
 	int getRow();
 	int getCol();

@@ -7,6 +7,15 @@
 
 #include "Piece.h"
 
+Piece::Piece() {
+	this->id = -1;
+	this->moved = false;
+	this->player = -1;
+	this->row = -1;
+	this->col = -1;
+	this->blockingVector = -1;
+}
+
 Piece::Piece(PieceID id, side_t player, int row, int col, bool moved) {
 	this->id = id;
 	this->moved = moved;

@@ -8,22 +8,22 @@
 #include "Board.h"
 
 Board::Board() {
-	this.board = new Piece[8][8];
+	this->board = new Piece[8][8];
 
-	this.pieces[Side.WHITE.ordinal()] = new ArrayList<Piece>();
-	this.pieces[Side.BLACK.ordinal()] = new ArrayList<Piece>();
+	this->pieces[WHITE] = new vector<Piece>();
+	this->pieces[BLACK] = new vector<Piece>();
 
-	this.piecesTaken[Side.WHITE.ordinal()] = new Stack<Piece>();
-	this.piecesTaken[Side.BLACK.ordinal()] = new Stack<Piece>();
+	this->piecesTaken[WHITE] = new vector<Piece>();
+	this->piecesTaken[BLACK] = new vector<Piece>();
 
-	this.moveHistory = new Stack<Move>();
-	this.hashCodeHistory = new Stack<Long>();
-	this.rngTable = RNGTable.getSingleton();
-	this.turn = Side.WHITE;
-	this.nullMoveInfo = new long[3];
+	this->moveHistory = new vector<Move>();
+	this->hashCodeHistory = new vector<long>();
+	this->rngTable = RNGTable::getSingleton();
+	this->turn = WHITE;
+	this->nullMoveInfo = new long[3];
 
-	kings[Side.BLACK.ordinal()] = new Piece(PieceID.KING, Side.BLACK, -1, -1, false);
-	kings[Side.WHITE.ordinal()] = new Piece(PieceID.KING, Side.WHITE, -1, -1, false);
+	kings[BLACK] = new Piece(KING, BLACK, -1, -1, false);
+	kings[WHITE] = new Piece(KING, WHITE, -1, -1, false);
 
 	placePiece(kings[BLACK], 0, 0);
 	placePiece(kings[WHITE], 7, 0);
@@ -108,9 +108,9 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 			this->moveHistory.push_back(*(new Move(move)));
 
 			if (Move::hasPieceTaken(move)) {
-				piecesTaken[Side::otherSide(moveSide)].push(
-						new Piece(Move::getPieceTakenID(move), Side::otherSide(moveSide), Move::getPieceTakenRow(move), Move::getPieceTakenCol(move),
-								Move::getPieceTakenHasMoved(move)));
+				piecesTaken[Side::otherSide(moveSide)].push_back(
+						*(new Piece(Move::getPieceTakenID(move), Side::otherSide(moveSide), Move::getPieceTakenRow(move), Move::getPieceTakenCol(move),
+								Move::getPieceTakenHasMoved(move))));
 			}
 
 			moveSide = Side::otherSide(moveSide);
@@ -139,7 +139,7 @@ bool Board::makeMove(long move) {
 	MoveNote note = Move::getNote(move);
 
 	// save off hashCode
-	hashCodeHistory.push(hashCode);
+	hashCodeHistory.push_back(hashCode);
 
 	// remove previous castle options
 	hashCode ^= rngTable.getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
@@ -222,7 +222,7 @@ bool Board::makeMove(long move) {
 
 	// if new move is pawn leap, add en passant file num
 	if (note == PAWN_LEAP) {
-		hashCode ^= rngTable.getEnPassantFile(Move.getToCol(move));
+		hashCode ^= rngTable.getEnPassantFile(Move::getToCol(move));
 	}
 
 	// add new castle options
@@ -354,7 +354,7 @@ long Board::undoMove() {
 		hashCode = generateHashCode();
 	} else {
 		// retrieve what the hashCode was before move was made
-		hashCode = hashCodeHistory.pop();
+		hashCode = hashCodeHistory.pop_back();
 	}
 
 	// verifyBitBoards();
@@ -788,7 +788,7 @@ PieceID Board::getPieceID(int row, int col) {
 
 }
 
-Side Board::getPieceSide(int row, int col) {
+side_t Board::getPieceSide(int row, int col) {
 	if (board[row][col] != 0) {
 		return board[row][col].getSide();
 	} else {
@@ -1091,7 +1091,7 @@ long Board::generateHashCode() {
 	for (int r = 0; r < 8; r++) {
 		for (int c = 0; c < 8; c++) {
 			p = board[r][c];
-			if (p != null) {
+			if (p != 0) {
 				hashCode ^= rngTable.getPiecePerSquareRandom(p.getSide(), p.getPieceID(), r, c);
 			}
 		}
