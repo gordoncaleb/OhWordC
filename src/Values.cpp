@@ -6,7 +6,7 @@
  */
 
 #include "Values.h"
-
+namespace OhWordC {
 Values::Values() {
 	// TODO Auto-generated constructor stub
 
@@ -15,4 +15,4 @@ Values::Values() {
 Values::~Values() {
 	// TODO Auto-generated destructor stub
 }
-
+}

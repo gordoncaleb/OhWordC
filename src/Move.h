@@ -9,7 +9,7 @@
 #define MOVE_H_
 
 using namespace std;
-
+namespace OhWordC {
 enum MoveNote {
 	NONE, CASTLE_NEAR, CASTLE_FAR, NEW_QUEEN, ENPASSANT, PAWN_LEAP
 };
@@ -82,5 +82,5 @@ public:
 
 	virtual ~Move();
 };
-
+}
 #endif /* MOVE_H_ */

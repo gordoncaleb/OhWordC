@@ -6,7 +6,7 @@
  */
 
 #include "Move.h"
-
+namespace OhWordC {
 /**
  * Bit-field 0-2 = toCol 3-5 = toRow 6-8 = fromCol 9-11 = fromRow 12-14 =
  * move note 15 = hadMoved 16 = has piece taken 17-19 = pieceTaken col 20-22
@@ -104,14 +104,6 @@ static bool Move::toEquals(long moveLongA, long moveLongB) {
 		return true;
 	else
 		return false;
-}
-
-string Move::toString() {
-	return Move::toString(move);
-}
-
-string Move::toXML() {
-	return Move::toXML(move);
 }
 
 long Move::setNote(MoveNote note) {
@@ -295,5 +287,6 @@ long Move::getMoveLong() {
 
 Move::~Move() {
 // TODO Auto-generated destructor stub
+}
 }
 

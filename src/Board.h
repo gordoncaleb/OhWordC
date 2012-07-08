@@ -14,6 +14,7 @@
 
 using namespace std;
 
+namespace OhWordC {
 enum GameStatus{IN_PLAY,CHECK,CHECKMATE,STALEMATE,TIMES_UP,DRAW,INVALID};
 enum PositionStatus{NO_PIECE,ENEMY,FRIEND,OFF_BOARD};
 
@@ -108,4 +109,5 @@ public:
 	static vector<Piece> getFullPieceSet(side_t player);
 };
 
+}
 #endif /* BOARD_H_ */

@@ -6,7 +6,7 @@
  */
 
 #include "Piece.h"
-
+namespace OhWordC {
 Piece::Piece() {
 	this->id = -1;
 	this->moved = false;
@@ -137,7 +137,7 @@ void Piece::setPieceID(PieceID id) {
 	this->id = id;
 }
 
-void Piece::generateValidMoves(Board board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+void Piece::generateValidMoves(Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
 
 	switch (id) {
 	case ROOK:
@@ -164,7 +164,7 @@ void Piece::generateValidMoves(Board board, long* nullMoveInfo, long* posBitBoar
 
 }
 
-void Piece::getNullMoveInfo(Board board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors, long friendly) {
+void Piece::getNullMoveInfo(Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors, long friendly) {
 	switch (id) {
 	case ROOK:
 		Rook::getNullMoveInfo(this, board, nullMoveInfo, updown, left, right, kingBitBoard, kingCheckVectors, friendly);
@@ -187,7 +187,7 @@ void Piece::getNullMoveInfo(Board board, long* nullMoveInfo, long updown, long l
 	}
 }
 
-void Piece::getNullMoveInfo(Board board, long* nullMoveBitBoards) {
+void Piece::getNullMoveInfo(Board* board, long* nullMoveBitBoards) {
 	switch (id) {
 	case ROOK:
 		Rook::getNullMoveInfo(this, board, nullMoveBitBoards);
@@ -217,4 +217,4 @@ Piece Piece::getCopy() {
 Piece::~Piece() {
 // TODO Auto-generated destructor stub
 }
-
+}

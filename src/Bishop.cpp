@@ -7,6 +7,7 @@
 
 #include "Bishop.h"
 
+namespace OhWordC {
 Bishop::Bishop() {
 }
 
@@ -22,21 +23,21 @@ static string Bishop::getStringID() {
 	return "B";
 }
 
-static void Bishop::generateMoves(Piece p, Board board, vector<long> moves) {
-	int currentRow = p.getRow();
-	int currentCol = p.getCol();
+static void Bishop::generateMoves(Piece* p, Board* board, vector<long> moves) {
+	int currentRow = p->getRow();
+	int currentCol = p->getCol();
 	int nextRow;
 	int nextCol;
 	long moveLong;
 	int value;
 	PositionStatus pieceStatus;
-	Side player = p.getSide();
+	side_t player = p->getSide();
 
 	int i = 1;
 	for (int d = 0; d < 4; d++) {
 		nextRow = currentRow + i * BISHOPMOVES[0][d];
 		nextCol = currentCol + i * BISHOPMOVES[1][d];
-		pieceStatus = board.checkPiece(nextRow, nextCol, player);
+		pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		while (pieceStatus == NO_PIECE) {
 
@@ -46,13 +47,13 @@ static void Bishop::generateMoves(Piece p, Board board, vector<long> moves) {
 			i++;
 			nextRow = currentRow + i * BISHOPMOVES[0][d];
 			nextCol = currentCol + i * BISHOPMOVES[1][d];
-			pieceStatus = board.checkPiece(nextRow, nextCol, player);
+			pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		}
 
 		if (pieceStatus == ENEMY) {
-			value = board.getPieceValue(nextRow, nextCol);
-			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board.getPiece(nextRow, nextCol));
+			value = board->getPieceValue(nextRow, nextCol);
+			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
 			moves.push_back(moveLong);
 		}
 
@@ -60,53 +61,53 @@ static void Bishop::generateMoves(Piece p, Board board, vector<long> moves) {
 	}
 }
 
-static vector<long> Bishop::generateValidMoves(Piece p, Board board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
-	int currentRow = p.getRow();
-	int currentCol = p.getCol();
+static vector<long> Bishop::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+	int currentRow = p->getRow();
+	int currentCol = p->getCol();
 	int nextRow;
 	int nextCol;
 	long moveLong;
 	int value;
 	PositionStatus pieceStatus;
-	Side player = p.getSide();
+	side_t player = p->getSide();
 
 	int i = 1;
 	for (int d = 0; d < 4; d++) {
 		nextRow = currentRow + i * BISHOPMOVES[0][d];
 		nextCol = currentCol + i * BISHOPMOVES[1][d];
-		pieceStatus = board.checkPiece(nextRow, nextCol, player);
+		pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		while (pieceStatus == NO_PIECE) {
 
-			if (p.isValidMove(nextRow, nextCol, nullMoveInfo)) {
+			if (p->isValidMove(nextRow, nextCol, nullMoveInfo)) {
 
 				if ((nullMoveInfo[0] & BitBoard::getMask(nextRow, nextCol)) != 0) {
-					value = -BISHOP_VALUE >> 1;
+					value = -Values::BISHOP_VALUE >> 1;
 				} else {
 					value = 0;
 				}
 
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE);
 
-				validMoves.add(moveLong);
+				validMoves.push_back(moveLong);
 			}
 
 			i++;
 			nextRow = currentRow + i * BISHOPMOVES[0][d];
 			nextCol = currentCol + i * BISHOPMOVES[1][d];
-			pieceStatus = board.checkPiece(nextRow, nextCol, player);
+			pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		}
 
 		if (pieceStatus == ENEMY) {
-			if (p.isValidMove(nextRow, nextCol, nullMoveInfo)) {
-				value = board.getPieceValue(nextRow, nextCol);
+			if (p->isValidMove(nextRow, nextCol, nullMoveInfo)) {
+				value = board->getPieceValue(nextRow, nextCol);
 
 				if ((nullMoveInfo[0] & BitBoard::getMask(nextRow, nextCol)) != 0) {
-					value -= BISHOP_VALUE >> 1;
+					value -= Values::BISHOP_VALUE >> 1;
 				}
 
-				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board.getPiece(nextRow, nextCol));
+				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
 				validMoves.push_back(moveLong);
 			}
 		}
@@ -118,16 +119,16 @@ static vector<long> Bishop::generateValidMoves(Piece p, Board board, long* nullM
 
 }
 
-static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
-		long friendly) {
+static void Bishop::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard,
+		long kingCheckVectors, long friendly) {
 
-	unsigned long bitPiece = piece.getBit();
+	unsigned long bitPiece = piece->getBit();
 
 	// up ------------------------------------------------------------
 	unsigned long temp = bitPiece;
 	unsigned long temp2 = bitPiece;
-	int r = piece.getRow();
-	int c = piece.getCol();
+	int r = piece->getRow();
+	int c = piece->getCol();
 	unsigned long attackVector = 0;
 
 	// going westward -----------------------------------------------------
@@ -153,7 +154,7 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp >> 9;
 					if ((temp & kingCheckVectors) != 0) {
-						board.getPiece(r - 1, c - 1).setBlockingVector(BitBoard::getNegSlope(r, c));
+						board->getPiece(r - 1, c - 1).setBlockingVector(BitBoard::getNegSlope(r, c));
 					}
 				}
 			}
@@ -162,8 +163,8 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 		// south west
 		temp = bitPiece;
 		temp2 = bitPiece;
-		r = piece.getRow();
-		c = piece.getCol();
+		r = piece->getRow();
+		c = piece->getCol();
 		attackVector = 0;
 
 		while ((temp2 = (temp2 << 7 & left)) != 0) {
@@ -186,7 +187,7 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp << 7;
 					if ((temp & kingCheckVectors) != 0) {
-						board.getPiece(r + 1, c - 1).setBlockingVector(BitBoard::getPosSlope(r, c));
+						board->getPiece(r + 1, c - 1).setBlockingVector(BitBoard::getPosSlope(r, c));
 					}
 				}
 			}
@@ -200,8 +201,8 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 		// northeast
 		temp = bitPiece;
 		temp2 = bitPiece;
-		c = piece.getCol();
-		r = piece.getRow();
+		c = piece->getCol();
+		r = piece->getRow();
 		attackVector = 0;
 
 		while ((temp2 = (temp2 >> 7 & right)) != 0) {
@@ -224,7 +225,7 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp >> 7;
 					if ((temp & kingCheckVectors) != 0) {
-						board.getPiece(r - 1, c + 1).setBlockingVector(BitBoard::getPosSlope(r, c));
+						board->getPiece(r - 1, c + 1).setBlockingVector(BitBoard::getPosSlope(r, c));
 					}
 				}
 			}
@@ -233,8 +234,8 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 		// southeast
 		temp = bitPiece;
 		temp2 = bitPiece;
-		c = piece.getCol();
-		r = piece.getRow();
+		c = piece->getCol();
+		r = piece->getRow();
 		attackVector = 0;
 
 		while ((temp2 = (temp2 << 9 & right)) != 0) {
@@ -257,7 +258,7 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp << 9;
 					if ((temp & kingCheckVectors) != 0) {
-						board.getPiece(r + 1, c + 1).setBlockingVector(BitBoard::getNegSlope(r, c));
+						board->getPiece(r + 1, c + 1).setBlockingVector(BitBoard::getNegSlope(r, c));
 					}
 				}
 			}
@@ -267,26 +268,26 @@ static void Bishop::getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo
 
 }
 
-static void Bishop::getNullMoveInfo(Piece p, Board board, long* nullMoveInfo) {
+static void Bishop::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 	long bitAttackVector = 0;
 	long bitAttackCompliment = 0;
 	bool inCheck = false;
 	Piece blockingPiece;
 
-	int currentRow = p.getRow();
-	int currentCol = p.getCol();
+	int currentRow = p->getRow();
+	int currentCol = p->getCol();
 	int nextRow;
 	int nextCol;
 	PositionStatus pieceStatus;
-	Side player = p.getSide();
+	side_t player = p->getSide();
 
-	long bitPosition = p.getBit();
+	long bitPosition = p->getBit();
 
 	int i = 1;
 	for (int d = 0; d < 4; d++) {
 		nextRow = currentRow + i * BISHOPMOVES[0][d];
 		nextCol = currentCol + i * BISHOPMOVES[1][d];
-		pieceStatus = board.checkPiece(nextRow, nextCol, player);
+		pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		if (pieceStatus == OFF_BOARD) {
 			continue;
@@ -297,7 +298,7 @@ static void Bishop::getNullMoveInfo(Piece p, Board board, long* nullMoveInfo) {
 			i++;
 			nextRow = currentRow + i * BISHOPMOVES[0][d];
 			nextCol = currentCol + i * BISHOPMOVES[1][d];
-			pieceStatus = board.checkPiece(nextRow, nextCol, player);
+			pieceStatus = board->checkPiece(nextRow, nextCol, player);
 		}
 
 		if (pieceStatus != OFF_BOARD) {
@@ -305,7 +306,7 @@ static void Bishop::getNullMoveInfo(Piece p, Board board, long* nullMoveInfo) {
 		}
 
 		if (pieceStatus == ENEMY) {
-			blockingPiece = board.getPiece(nextRow, nextCol);
+			blockingPiece = board->getPiece(nextRow, nextCol);
 
 			if (blockingPiece.getPieceID() == KING) {
 				nullMoveInfo[1] &= (bitAttackVector | bitPosition);
@@ -315,18 +316,18 @@ static void Bishop::getNullMoveInfo(Piece p, Board board, long* nullMoveInfo) {
 			i++;
 			nextRow = currentRow + i * BISHOPMOVES[0][d];
 			nextCol = currentCol + i * BISHOPMOVES[1][d];
-			pieceStatus = board.checkPiece(nextRow, nextCol, player);
+			pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 			while (pieceStatus == NO_PIECE) {
 				bitAttackCompliment |= BitBoard::getMask(nextRow, nextCol);
 				i++;
 				nextRow = currentRow + i * BISHOPMOVES[0][d];
 				nextCol = currentCol + i * BISHOPMOVES[1][d];
-				pieceStatus = board.checkPiece(nextRow, nextCol, player);
+				pieceStatus = board->checkPiece(nextRow, nextCol, player);
 			}
 
 			if (pieceStatus != OFF_BOARD) {
-				if (board.getPieceID(nextRow, nextCol) == KING && board.getPiece(nextRow, nextCol).getSide() != player) {
+				if (board->getPieceID(nextRow, nextCol) == KING && board->getPiece(nextRow, nextCol).getSide() != player) {
 					blockingPiece.setBlockingVector(bitAttackCompliment | bitAttackVector | bitPosition);
 				}
 			}
@@ -354,5 +355,7 @@ static void Bishop::getNullMoveInfo(Piece p, Board board, long* nullMoveInfo) {
 
 Bishop::~Bishop() {
 	// TODO Auto-generated destructor stub
+}
+
 }
 

@@ -7,7 +7,7 @@
 
 #ifndef SIDE_H_
 #define SIDE_H_
-
+namespace OhWordC {
 enum side_t {
 	BLACK = 1, WHITE = 2, NOONE = 4, BOTH = 8
 };
@@ -18,5 +18,5 @@ public:
 	static side_t otherSide(side_t side);
 	virtual ~Side();
 };
-
+}
 #endif /* SIDE_H_ */

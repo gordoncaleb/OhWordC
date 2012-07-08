@@ -6,7 +6,7 @@
  */
 
 #include "Side.h"
-
+namespace OhWordC {
 Side::Side() {
 	// TODO Auto-generated constructor stub
 
@@ -19,4 +19,4 @@ static side_t Side::otherSide(side_t side) {
 Side::~Side() {
 // TODO Auto-generated destructor stub
 }
-
+}

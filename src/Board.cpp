@@ -7,6 +7,8 @@
 
 #include "Board.h"
 
+namespace OhWordC {
+
 Board::Board() {
 	this->board = new Piece[8][8];
 
@@ -103,7 +105,8 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 		}
 
 		for (int i = 0; i < moveHistory.size(); i++) {
-			move = moveHistory.pop_back().getMoveLong();
+			move = moveHistory.back().getMoveLong();
+			moveHistory.pop_back();
 
 			this->moveHistory.push_back(*(new Move(move)));
 
@@ -151,8 +154,7 @@ bool Board::makeMove(long move) {
 		Piece pieceTaken = board[Move::getPieceTakenRow(move)][Move::getPieceTakenCol(move)];
 
 		// remove pieceTaken from vectors
-		pieces[Side::otherSide(turn)].erase(pieceTaken);
-		piecesTaken[Side::otherSide(turn)].push_back(pieceTaken);
+		pieces[Side::otherSide(turn)].erase(find(pieces[Side::otherSide(turn)].begin(),pieces[Side::otherSide(turn)].end(),pieceTaken));
 
 		// // remove bit position from appropriate side
 		// allPosBitBoard[pieceTaken.getSide().ordinal()] ^=
@@ -484,9 +486,9 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 
 	}
 
-	if (sort) {
-		Collections.sort(validMoves, Collections.reverseOrder());
-	}
+//	if (sort) {
+//		Collections.sort(validMoves, Collections.reverseOrder());
+//	}
 
 	if (validMoves.size() == 0) {
 		if (isInCheck()) {
@@ -592,29 +594,29 @@ int Board::getOpeningPositionValue(Piece piece) {
 	}
 
 	int value;
-	Side player = piece.getSide();
+	side_t player = piece.getSide();
 	int row = piece.getRow();
 	int col = piece.getCol();
 
 	switch (piece.getPieceID()) {
 	case KNIGHT:
-		value = PositionBonus.getKnightPositionBonus(row, col, player);
+		value = PositionBonus::getKnightPositionBonus(row, col, player);
 		break;
 	case PAWN:
-		value = PositionBonus.getPawnPositionBonus(row, col, player);
+		value = PositionBonus::getPawnPositionBonus(row, col, player);
 		break;
 	case BISHOP:
 		value = 0;
 		break;
 	case KING:
 		value = 0;
-		value = PositionBonus.getKingOpeningPositionBonus(row, col, player);
+		value = PositionBonus::getKingOpeningPositionBonus(row, col, player);
 		break;
 	case QUEEN:
 		value = 0;
 		break;
 	case ROOK:
-		value = PositionBonus.getRookBonus(row, col);
+		value = PositionBonus::getRookBonus(row, col);
 		break;
 	default:
 		value = 0;
@@ -627,28 +629,28 @@ int Board::getOpeningPositionValue(Piece piece) {
 
 int Board::getEndGamePositionValue(Piece piece) {
 	int value;
-	Side player = piece.getSide();
+	side_t player = piece.getSide();
 	int row = piece.getRow();
 	int col = piece.getCol();
 
 	switch (piece.getPieceID()) {
 	case KNIGHT:
-		value = PositionBonus.getKnightPositionBonus(row, col, player);
+		value = PositionBonus::getKnightPositionBonus(row, col, player);
 		break;
 	case PAWN:
-		value = PositionBonus.getPawnPositionBonus(row, col, player);
+		value = PositionBonus::getPawnPositionBonus(row, col, player);
 		break;
 	case BISHOP:
 		value = 50;
 		break;
 	case KING:
-		value = PositionBonus.getKingEndGamePositionBonus(row, col, player);
+		value = PositionBonus::getKingEndGamePositionBonus(row, col, player);
 		break;
 	case QUEEN:
 		value = 100;
 		break;
 	case ROOK:
-		value = PositionBonus.getRookBonus(row, col);
+		value = PositionBonus::getRookBonus(row, col);
 		break;
 	default:
 		value = 0;
@@ -899,7 +901,7 @@ bool Board::placePiece(Piece piece, int toRow, int toCol) {
 			allPosBitBoard[pieceTaken.getSide()] ^= pieceTaken.getBit();
 
 			// remove ref to piece taken
-			pieces[pieceTaken.getSide()].remove(pieceTaken);
+			pieces[pieceTaken.getSide()].erase(find(pieces[pieceTaken.getSide()].begin(),pieces[pieceTaken.getSide()].end(),pieceTaken));
 		}
 
 		// tell piece where it is now
@@ -914,7 +916,7 @@ bool Board::placePiece(Piece piece, int toRow, int toCol) {
 	} else {
 		// piece is being taken off the board. Remove
 		if (piece.getPieceID() != KING) {
-			pieces[piece.getSide()].remove(piece);
+			pieces[piece.getSide()].erase(find(pieces[piece.getSide()].begin(),pieces[piece.getSide()].end(),piece));
 		}
 	}
 
@@ -1189,7 +1191,7 @@ void Board::loadPiecesTaken() {
 
 			for (int t = 0; t < piecesTaken[i].size(); t++) {
 				if (piecesTaken[i].at(t).getPieceID() == piecePresent.getPieceID()) {
-					piecesTaken[i].remove(t);
+					piecesTaken[i].erase(piecesTaken[i].begin() + t);
 					break;
 				}
 			}
@@ -1221,5 +1223,7 @@ static vector<Piece> Board::getFullPieceSet(side_t player) {
 	pieces.push_back(*(new Piece(QUEEN, player, 0, 0, false)));
 
 	return pieces;
+}
+
 }
 

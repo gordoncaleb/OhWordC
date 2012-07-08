@@ -6,7 +6,9 @@
  */
 
 #include "Math.h"
+#include <cstdlib>
 
+namespace OhWordC {
 Math::Math() {
 	// TODO Auto-generated constructor stub
 
@@ -29,7 +31,13 @@ static int Math::min(int a, int b) {
 	return (a < b) ? a : b;
 }
 
+static double Math::random() {
+	return ((double) rand() / (double) RAND_MAX);
+}
+
 Math::~Math() {
 // TODO Auto-generated destructor stub
+}
+
 }
 

@@ -9,7 +9,7 @@
 #define BITBOARD_H_
 
 using namespace std;
-
+namespace OhWordC {
 class BitBoard {
 public:
 	BitBoard();
@@ -33,5 +33,6 @@ public:
 	static unsigned long count_bits(long n);
 	virtual ~BitBoard();
 };
+}
 
 #endif /* BITBOARD_H_ */

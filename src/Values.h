@@ -7,7 +7,7 @@
 
 #ifndef VALUES_H_
 #define VALUES_H_
-
+namespace OhWordC {
 class Values {
 
 	static int CHECKMATE_MASK = (int) Math::pow(2, 19);
@@ -44,5 +44,5 @@ public:
 	static int getPieceValue(PieceID id);
 	virtual ~Values();
 };
-
+}
 #endif /* VALUES_H_ */

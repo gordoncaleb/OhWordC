@@ -6,7 +6,7 @@
  */
 
 #include "BitBoard.h"
-
+namespace OhWordC {
 BitBoard::BitBoard() {
 
 }
@@ -161,6 +161,8 @@ static string BitBoard::printBitBoard(long bitBoard) {
 }
 
 BitBoard::~BitBoard() {
+
+}
 
 }
 

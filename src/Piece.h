@@ -9,7 +9,7 @@
 #define PIECE_H_
 
 using namespace std;
-
+namespace OhWordC {
 enum PieceID {
 	ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
 };
@@ -44,10 +44,10 @@ public:
 	bool isValidMove(int, int, long[]);
 	PieceID getPieceID();
 	void setPieceID(PieceID id);
-	void generateValidMoves(Board, long[], long[], vector<long>);
-	void getNullMoveInfo(Board, long[], long, long, long, long, long, long);
-	void getNullMoveInfo(Board, long[]);
+	void generateValidMoves(Board*, long[], long[], vector<long>);
+	void getNullMoveInfo(Board*, long[], long, long, long, long, long, long);
+	void getNullMoveInfo(Board*, long[]);
 	Piece getCopy();
 };
-
+}
 #endif /* PIECE_H_ */

@@ -7,10 +7,10 @@
 
 #ifndef RNGTABLE_H_
 #define RNGTABLE_H_
-
+namespace OhWordC {
 class RNGTable {
 	static int* seed = {-52, 45, -101, 26, -51, -99, -84, -79};
-	Random rng;
+	SecureRandom rng;
 	long**** piecePerSquare;
 	long blackToMove;
 	long**** castlingRights;
@@ -31,5 +31,5 @@ public:
 	long getEnPassantFile(int file);
 	virtual ~RNGTable();
 };
-
+}
 #endif /* RNGTABLE_H_ */

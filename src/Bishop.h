@@ -10,6 +10,7 @@
 
 using namespace std;
 
+namespace OhWordC {
 class Bishop {
 
 	static int** BISHOPMOVES = { { 1, 1, -1, -1 }, { 1, -1, 1, -1 } };
@@ -19,12 +20,13 @@ public:
 	static PieceID getPieceID();
 	static string getName();
 	static string getStringID();
-	static void generateMoves(Piece p, Board board, vector<long> moves);
-	static vector<long> generateValidMoves(Piece p, Board board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
-	static void getNullMoveInfo(Piece piece, Board board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
+	static void generateMoves(Piece* p, Board* board, vector<long> moves);
+	static vector<long> generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
+	static void getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
 			long friendly);
-	static void getNullMoveInfo(Piece p, Board board, long* nullMoveInfo);
+	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
 	virtual ~Bishop();
 };
+}
 
 #endif /* BISHOP_H_ */

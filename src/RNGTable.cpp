@@ -6,7 +6,7 @@
  */
 
 #include "RNGTable.h"
-
+namespace OhWordC {
 RNGTable::RNGTable() {
 	rng = new SecureRandom(seed);
 	generatePiecePerSquare();
@@ -112,4 +112,4 @@ long RNGTable::getEnPassantFile(int file) {
 RNGTable::~RNGTable() {
 	// TODO Auto-generated destructor stub
 }
-
+}
