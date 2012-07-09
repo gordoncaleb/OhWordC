@@ -11,8 +11,8 @@
 namespace OhWordC {
 using namespace std;
 class Knight {
-	static int** KNIGHTMOVES = { { 2, 2, -2, -2, 1, -1, 1, -1 }, { 1, -1, 1, -1, 2, 2, -2, -2 } };
 public:
+	static int KNIGHTMOVES [2][8];
 	Knight();
 	static PieceID getPieceID();
 	static string getName();
@@ -21,5 +21,7 @@ public:
 	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
 	virtual ~Knight();
 };
+
+int Knight::KNIGHTMOVES [2][8] = { { 2, 2, -2, -2, 1, -1, 1, -1 }, { 1, -1, 1, -1, 2, 2, -2, -2 } };
 }
 #endif /* KNIGHT_H_ */

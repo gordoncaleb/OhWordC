@@ -8,6 +8,7 @@
 #include "RNGTable.h"
 namespace OhWordC {
 RNGTable::RNGTable() {
+	this->seed = {-52, 45, -101, 26, -51, -99, -84, -79}
 	rng = new SecureRandom(seed);
 	generatePiecePerSquare();
 	generateBlackToMove();

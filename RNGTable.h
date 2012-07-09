@@ -10,14 +10,15 @@
 #include "stdafx.h"
 namespace OhWordC {
 class RNGTable {
-	static int* seed = {-52, 45, -101, 26, -51, -99, -84, -79};
-	SecureRandom rng;
-	long**** piecePerSquare;
-	long blackToMove;
-	long**** castlingRights;
-	long* enPassantFile;
-
+	static int seed [8];
 	static RNGTable singleton;
+	SecureRandom rng;
+	long piecePerSquare [2][6][8][8];
+	long blackToMove;
+	long castlingRights [2][2][2][2];
+	long enPassantFile [8];
+
+
 public:
 	RNGTable();
 	static RNGTable getSingleton();

@@ -13,12 +13,13 @@ using namespace std;
 namespace OhWordC {
 
 class PositionBonus {
+public:
 	static int knightBonus[8][8];
 	static int kingOpeningBonus[8][8];
 	static int kingEndGameBonus[8][8];
 	static int rookBonus[8][8];
 	static int pawnBonus[8][8];
-public:
+
 	PositionBonus();
 	static void applyScale();
 	static void printBonus(int** bonus, string name);
@@ -33,7 +34,7 @@ public:
 	virtual ~PositionBonus();
 };
 
-int knightBonus[8][8] = { { -30, -20, -10, -10, -10, -10, -20, -30 }, // 1
+int PositionBonus::knightBonus[8][8] = { { -30, -20, -10, -10, -10, -10, -20, -30 }, // 1
 		{ -20, 10, 10, 10, 10, 10, 10, -20 }, // 2
 		{ -10, 10, 20, 20, 20, 20, 10, -10 }, // 3
 		{ -10, 10, 20, 25, 25, 20, 10, -10 }, // 4
@@ -44,7 +45,7 @@ int knightBonus[8][8] = { { -30, -20, -10, -10, -10, -10, -20, -30 }, // 1
 // a, b, c, d, e, f, g, h
 };
 
-int kingOpeningBonus[8][8] = { { 25, 25, 35, 0, 10, 0, 40, 35 }, // 1
+int PositionBonus::kingOpeningBonus[8][8] = { { 25, 25, 35, 0, 10, 0, 40, 35 }, // 1
 		{ 10, 10, 5, 0, 0, 5, 10, 15 }, // 2
 		{ 5, 0, -10, -10, -10, -10, 0, 5 }, // 3
 		{ 0, -15, -20, -25, -25, -20, -15, 0 }, // 4
@@ -55,7 +56,7 @@ int kingOpeningBonus[8][8] = { { 25, 25, 35, 0, 10, 0, 40, 35 }, // 1
 // a, b, c, d, e, f, g, h
 };
 
-int kingEndGameBonus[8][8] = { { -10, -5, 0, 0, 0, 0, -5, -10 }, // 1
+int PositionBonus::kingEndGameBonus[8][8] = { { -10, -5, 0, 0, 0, 0, -5, -10 }, // 1
 		{ -5, 20, 20, 20, 20, 20, 20, -5 }, // 2
 		{ 0, 20, 40, 40, 40, 40, 20, 0 }, // 3
 		{ 0, 20, 40, 45, 45, 40, 20, 0 }, // 4
@@ -66,7 +67,7 @@ int kingEndGameBonus[8][8] = { { -10, -5, 0, 0, 0, 0, -5, -10 }, // 1
 // a, b, c, d, e, f, g, h
 };
 
-int rookBonus[8][8] = { { 0, 0, 7, 10, 10, 5, 0, 0 }, // 1
+int PositionBonus::rookBonus[8][8] = { { 0, 0, 7, 10, 10, 5, 0, 0 }, // 1
 		{ -5, 0, 0, 0, 0, 0, 0, -5 }, // 2
 		{ -5, 0, 0, 0, 0, 0, 0, -5 }, // 3
 		{ -5, 0, 0, 0, 0, 0, 0, -5 }, // 4
@@ -77,7 +78,7 @@ int rookBonus[8][8] = { { 0, 0, 7, 10, 10, 5, 0, 0 }, // 1
 // a, b, c, d, e, f, g, h
 };
 
-int pawnBonus[8][8] = { { 0, 0, 0, 0, 0, 0, 0, 0 }, // 1
+int PositionBonus::pawnBonus[8][8] = { { 0, 0, 0, 0, 0, 0, 0, 0 }, // 1
 		{ 5, 2, 2, -10, -10, 2, 2, 5 }, // 2
 		{ 5, 0, 0, 0, 0, 0, 0, 5 }, // 3
 		{ 0, 10, 10, 15, 15, 10, 10, 0 }, // 4

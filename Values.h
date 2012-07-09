@@ -11,7 +11,7 @@
 namespace OhWordC {
 
 class Values {
-
+public:
 	static int CHECKMATE_MASK;
 
 	static int KING_VALUE;
@@ -38,10 +38,9 @@ class Values {
 	static int QUEENPHASE;
 
 	static int TOTALPHASE;
-	static int* PIECE_PHASE_VAL;
-	static int* PIECE_VALUE;
+	static int PIECE_PHASE_VAL [6];
+	static int PIECE_VALUE [6];
 
-public:
 	Values();
 	static int getPieceValue(PieceID id);
 	virtual ~Values();
@@ -73,7 +72,7 @@ int Values::ROOKPHASE = 2;
 int Values::QUEENPHASE = 4;
 
 int Values::TOTALPHASE = PAWNPHASE * 16 + KNIGHTPHASE * 4 + BISHOPPHASE * 4 + ROOKPHASE * 4 + QUEENPHASE * 2;
-int Values::PIECE_PHASE_VAL[6] = { ROOKPHASE, KNIGHTPHASE, BISHOPPHASE, QUEENPHASE, 0, PAWNPHASE };
+int Values::PIECE_PHASE_VAL [6] = { ROOKPHASE, KNIGHTPHASE, BISHOPPHASE, QUEENPHASE, 0, PAWNPHASE };
 int Values::PIECE_VALUE[6] = { ROOK_VALUE, KNIGHT_VALUE, BISHOP_VALUE, QUEEN_VALUE, KING_VALUE, PAWN_VALUE };
 }
 #endif /* VALUES_H_ */

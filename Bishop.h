@@ -15,9 +15,9 @@ using namespace std;
 namespace OhWordC {
 class Bishop {
 
-	static int** BISHOPMOVES = { { 1, 1, -1, -1 }, { 1, -1, 1, -1 } };
-
 public:
+	static int BISHOPMOVES [2][4];
+
 	Bishop();
 	static PieceID getPieceID();
 	static string getName();
@@ -29,6 +29,9 @@ public:
 	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
 	virtual ~Bishop();
 };
+
+int Bishop::BISHOPMOVES [2][4] = { { 1, 1, -1, -1 }, { 1, -1, 1, -1 } };
+
 }
 
 #endif /* BISHOP_H_ */

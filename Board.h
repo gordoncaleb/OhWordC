@@ -20,27 +20,27 @@ enum PositionStatus{NO_PIECE,ENEMY,FRIEND,OFF_BOARD};
 
 class Board {
 
-	Piece board[8][8];
+	Piece board [8][8];
 	GameStatus boardStatus;
 	vector<long> validMoves;
-	vector<Piece> pieces[2];
-	vector<Piece> piecesTaken[2];
-	int castleRights[2];
+	vector<Piece> pieces [2];
+	vector<Piece> piecesTaken [2];
+	int castleRights [2];
 
 	Piece kings[2];
-	int** rookStartCols = new int[2][2];
-	int* kingCols = new int[2];
-	int* materialRow = {0, 7};
+	int rookStartCols [2][2];
+	int kingCols [2];
+	int materialRow [2];
 
 	side_t turn;
 	RNGTable rngTable;
 	vector<Move> moveHistory;
 	long hashCode;
 	vector<long> hashCodeHistory;
-	long* nullMoveInfo = {0, -1, 0};
+	long nullMoveInfo [3];
 
-	long** posBitBoard = new long[6][2];
-	long* allPosBitBoard = new long[2];
+	long posBitBoard [6][2];
+	long allPosBitBoard [2];
 
 public:
 	Board();

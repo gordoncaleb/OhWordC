@@ -12,8 +12,10 @@ using namespace std;
 
 namespace OhWordC {
 class Queen {
-	static int** QUEENMOVES = { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
+
 public:
+	static int QUEENMOVES [2][8];
+
 	Queen();
 	static PieceID getPieceID();
 	static string getName();
@@ -24,5 +26,7 @@ public:
 	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
 	virtual ~Queen();
 };
+
+int Queen::QUEENMOVES [2][8]= { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
 }
 #endif /* QUEEN_H_ */

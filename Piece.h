@@ -8,16 +8,12 @@
 #ifndef PIECE_H_
 #define PIECE_H_
 
-#include "Side.h"
 #include "stdafx.h"
 
 using namespace std;
 using namespace OhWordC;
 
 namespace OhWordC {
-enum PieceID {
-	ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
-};
 
 class Piece {
 	int row;

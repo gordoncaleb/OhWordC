@@ -11,8 +11,10 @@
 using namespace std;
 namespace OhWordC {
 class Rook {
-	static int** ROOKMOVES = { { 1, -1, 0, 0 }, { 0, 0, 1, -1 } };
+
 public:
+	static int ROOKMOVES [2][4];
+
 	Rook();
 	static PieceID getPieceID();
 	static string getName();
@@ -23,5 +25,7 @@ public:
 	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
 	virtual ~Rook();
 };
+
+Rook::ROOKMOVES = { { 1, -1, 0, 0 }, { 0, 0, 1, -1 } }
 }
 #endif /* ROOK_H_ */

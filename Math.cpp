@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "stdafx.h"
+#include "Math.h"
 
 namespace OhWordC {
 Math::Math() {
@@ -13,7 +13,7 @@ Math::Math() {
 
 }
 
-double Math::pow(double base, double power) {
+double pow(double base, double power) {
 	double out = 1;
 	while (power > 0) {
 		out *= base;
@@ -22,15 +22,15 @@ double Math::pow(double base, double power) {
 	return out;
 }
 
-int Math::max(int a, int b) {
+int max(int a, int b) {
 	return (a >= b) ? a : b;
 }
 
-int Math::min(int a, int b) {
+int min(int a, int b) {
 	return (a < b) ? a : b;
 }
 
-double Math::random() {
+double random() {
 	return ((double) rand() / (double) RAND_MAX);
 }
 

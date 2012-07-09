@@ -37,6 +37,10 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 	this->pieces = new vector[2];
 	this->piecesTaken = new vector[2];
 	this->kings = new Piece[2];
+	this->materialRow = {0, 7};
+	this->nullMoveInfo = {0, -1, 0};
+	this->posBitBoard = new long[6][2];
+	this->allPosBitBoard = new long[2];
 
 	this->board = new Piece[8][8];
 	this->pieces[WHITE] = new vector<Piece>(pieces[WHITE].size());
