@@ -7,6 +7,9 @@
 
 #ifndef BOARDMAKER_H_
 #define BOARDMAKER_H_
+
+#include "stdafx.h"
+
 using namespace std;
 namespace OhWordC {
 

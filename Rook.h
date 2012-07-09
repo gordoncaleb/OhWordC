@@ -7,6 +7,7 @@
 
 #ifndef ROOK_H_
 #define ROOK_H_
+#include "stdafx.h"
 using namespace std;
 namespace OhWordC {
 class Rook {

@@ -7,10 +7,11 @@
 
 #ifndef KING_H_
 #define KING_H_
+#include "stdafx.h"
 using namespace std;
 namespace OhWordC {
 class King {
-	static int** KINGMOVES = { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
+	static int KINGMOVES[2][8];
 public:
 	King();
 	static PieceID getPieceID();
@@ -25,6 +26,8 @@ public:
 	static bool canCastleNear(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard);
 	virtual ~King();
 };
+
+ int KINGMOVES[2][8] = { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
 }
 
 #endif /* KING_H_ */

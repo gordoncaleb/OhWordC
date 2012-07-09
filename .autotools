@@ -13,7 +13,7 @@
 <option id="target" value=""/>
 <option id="prefix" value=""/>
 <option id="exec-prefix" value=""/>
-<option id="libdir" value=""/>
+<option id="libdir" value="/src"/>
 <option id="bindir" value=""/>
 <option id="sbindir" value=""/>
 <option id="includedir" value=""/>

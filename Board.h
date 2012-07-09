@@ -8,9 +8,9 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
-#include <vector>
-#include <stack>
-#include <stdio.h>
+
+#include "Piece.h"
+#include "stdafx.h"
 
 using namespace std;
 
@@ -20,14 +20,14 @@ enum PositionStatus{NO_PIECE,ENEMY,FRIEND,OFF_BOARD};
 
 class Board {
 
-	Piece** board;
+	Piece board[8][8];
 	GameStatus boardStatus;
-	vector<long> validMoves = new vector<long>(100);
-	vector<Piece>* pieces = new vector[2];
-	vector<Piece>* piecesTaken = new stack[2];
-	int* castleRights = new int[2];
+	vector<long> validMoves;
+	vector<Piece> pieces[2];
+	vector<Piece> piecesTaken[2];
+	int castleRights[2];
 
-	Piece* kings = new Piece[2];
+	Piece kings[2];
 	int** rookStartCols = new int[2][2];
 	int* kingCols = new int[2];
 	int* materialRow = {0, 7};

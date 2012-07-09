@@ -8,6 +8,9 @@
 #ifndef MOVE_H_
 #define MOVE_H_
 
+#include "stdafx.h"
+
+
 using namespace std;
 namespace OhWordC {
 enum MoveNote {
@@ -16,14 +19,14 @@ enum MoveNote {
 
 class Move {
 
-	static int hadMovedMask = 1 << 15;
-	static int hasPieceTakenMask = 1 << 16;
-	static int pieceTakenHasMoved = 1 << 26;
-	static int fromToMask = 0xFFF;
-	static int fromMask = 0xFC0;
-	static int toMask = 0x3F;
-	static int notNoteMask = ~(0x7000);
-	static int notPieceTaken = ~(0x7FF << 16);
+	static int hadMovedMask;
+	static int hasPieceTakenMask;
+	static int pieceTakenHasMoved ;
+	static int fromToMask;
+	static int fromMask;
+	static int toMask;
+	static int notNoteMask;
+	static int notPieceTaken;
 
 	long move;
 
@@ -82,5 +85,15 @@ public:
 
 	virtual ~Move();
 };
+
+ int Move::hadMovedMask = 1 << 15;
+ int Move::hasPieceTakenMask = 1 << 16;
+ int Move::pieceTakenHasMoved = 1 << 26;
+ int Move::fromToMask = 0xFFF;
+ int Move::fromMask = 0xFC0;
+ int Move::toMask = 0x3F;
+ int Move::notNoteMask = ~(0x7000);
+ int Move::notPieceTaken = ~(0x7FF << 16);
+
 }
 #endif /* MOVE_H_ */

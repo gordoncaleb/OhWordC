@@ -33,6 +33,11 @@ Board::Board() {
 }
 
 Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int** rookStartCols, int* kingCols) {
+	this->validMoves = new vector<long>(100);
+	this->pieces = new vector[2];
+	this->piecesTaken = new vector[2];
+	this->kings = new Piece[2];
+
 	this->board = new Piece[8][8];
 	this->pieces[WHITE] = new vector<Piece>(pieces[WHITE].size());
 	this->pieces[BLACK] = new vector<Piece>(pieces[BLACK].size());

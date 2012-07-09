@@ -90,7 +90,7 @@ static int BoardMaker::ithEmptyPosition(int i, PieceID * setup) {
 }
 
 static int BoardMaker::rollDie(int dieSize) {
-	return (int) (Math.random() * (double) dieSize);
+	return (int) (Math::random() * (double) dieSize);
 }
 
 BoardMaker::~BoardMaker() {

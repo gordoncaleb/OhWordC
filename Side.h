@@ -7,6 +7,7 @@
 
 #ifndef SIDE_H_
 #define SIDE_H_
+#include "stdafx.h"
 namespace OhWordC {
 enum side_t {
 	BLACK = 1, WHITE = 2, NOONE = 4, BOTH = 8

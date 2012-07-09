@@ -8,7 +8,12 @@
 #ifndef PIECE_H_
 #define PIECE_H_
 
+#include "Side.h"
+#include "stdafx.h"
+
 using namespace std;
+using namespace OhWordC;
+
 namespace OhWordC {
 enum PieceID {
 	ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
@@ -44,9 +49,9 @@ public:
 	bool isValidMove(int, int, long[]);
 	PieceID getPieceID();
 	void setPieceID(PieceID id);
-	void generateValidMoves(Board*, long[], long[], vector<long>);
-	void getNullMoveInfo(Board*, long[], long, long, long, long, long, long);
-	void getNullMoveInfo(Board*, long[]);
+//	void generateValidMoves(Board, long[], long[], vector<long>);
+//	void getNullMoveInfo(Board, long[], long, long, long, long, long, long);
+//	void getNullMoveInfo(Board, long[]);
 	Piece getCopy();
 };
 }

@@ -9,10 +9,16 @@
  */
 
 #include <iostream>
+#include <stdio.h>
+
+#include "Math.h"
 
 using namespace std;
+using namespace OhWordC;
 
 int main(void) {
-	cout << "tesat" << endl; /* prints Hello World */
+	printf("OhWordC");
+
+	printf("%f",OhWordC::Math::random());
 	return 0;
 }

@@ -7,6 +7,7 @@
 
 #ifndef MATH_H_
 #define MATH_H_
+#include "stdafx.h"
 namespace OhWordC {
 class Math {
 public:
@@ -17,5 +18,8 @@ public:
 	static double random();
 	virtual ~Math();
 };
+
+
+
 }
 #endif /* MATH_H_ */
