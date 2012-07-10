@@ -8,8 +8,6 @@
 #ifndef MOVE_H_
 #define MOVE_H_
 
-#include "stdafx.h"
-
 
 using namespace std;
 namespace OhWordC {

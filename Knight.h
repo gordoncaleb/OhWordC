@@ -7,7 +7,7 @@
 
 #ifndef KNIGHT_H_
 #define KNIGHT_H_
-#include "stdafx.h"
+
 namespace OhWordC {
 using namespace std;
 class Knight {

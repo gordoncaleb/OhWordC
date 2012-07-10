@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Rook.h"
+#include "stdafx.h"
 namespace OhWordC {
 Rook::Rook() {
 	// TODO Auto-generated constructor stub

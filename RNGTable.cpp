@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "RNGTable.h"
+#include "stdafx.h"
 namespace OhWordC {
 RNGTable::RNGTable() {
 	this->seed = {-52, 45, -101, 26, -51, -99, -84, -79}

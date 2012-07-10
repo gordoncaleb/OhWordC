@@ -7,7 +7,7 @@
 
 #ifndef MATH_H_
 #define MATH_H_
-#include "stdafx.h"
+
 namespace OhWordC {
 class Math {
 public:

@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Queen.h"
+#include "stdafx.h"
 namespace OhWordC {
 Queen::Queen() {
 	// TODO Auto-generated constructor stub

@@ -7,7 +7,7 @@
 
 #ifndef POSITIONBONUS_H_
 #define POSITIONBONUS_H_
-#include "stdafx.h"
+
 using namespace std;
 
 namespace OhWordC {

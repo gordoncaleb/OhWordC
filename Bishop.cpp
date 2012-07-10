@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Bishop.h"
+#include "stdafx.h"
 
 namespace OhWordC {
 Bishop::Bishop() {

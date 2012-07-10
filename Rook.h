@@ -7,7 +7,7 @@
 
 #ifndef ROOK_H_
 #define ROOK_H_
-#include "stdafx.h"
+
 using namespace std;
 namespace OhWordC {
 class Rook {
@@ -26,6 +26,6 @@ public:
 	virtual ~Rook();
 };
 
-Rook::ROOKMOVES = { { 1, -1, 0, 0 }, { 0, 0, 1, -1 } }
+int Rook::ROOKMOVES[2][4] = { { 1, -1, 0, 0 }, { 0, 0, 1, -1 } };
 }
 #endif /* ROOK_H_ */

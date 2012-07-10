@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "BitBoard.h"
+#include "stdafx.h"
 namespace OhWordC {
 BitBoard::BitBoard() {
 

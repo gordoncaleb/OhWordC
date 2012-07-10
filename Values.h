@@ -7,7 +7,7 @@
 
 #ifndef VALUES_H_
 #define VALUES_H_
-#include "stdafx.h"
+
 namespace OhWordC {
 
 class Values {

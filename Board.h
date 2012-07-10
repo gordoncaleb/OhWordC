@@ -9,9 +9,6 @@
 #define BOARD_H_
 
 
-#include "Piece.h"
-#include "stdafx.h"
-
 using namespace std;
 
 namespace OhWordC {
@@ -20,7 +17,7 @@ enum PositionStatus{NO_PIECE,ENEMY,FRIEND,OFF_BOARD};
 
 class Board {
 
-	Piece board [8][8];
+	Piece ** board;
 	GameStatus boardStatus;
 	vector<long> validMoves;
 	vector<Piece> pieces [2];

@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Side.h"
+#include "stdafx.h"
 namespace OhWordC {
 Side::Side() {
 	// TODO Auto-generated constructor stub

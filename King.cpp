@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "King.h"
+#include "stdafx.h"
 
 namespace OhWordC {
 King::King() {

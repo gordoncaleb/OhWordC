@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Knight.h"
+#include "stdafx.h"
 namespace OhWordC {
 Knight::Knight() {
 	// TODO Auto-generated constructor stub

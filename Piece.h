@@ -8,12 +8,15 @@
 #ifndef PIECE_H_
 #define PIECE_H_
 
-#include "stdafx.h"
-
 using namespace std;
-using namespace OhWordC;
 
 namespace OhWordC {
+
+enum PieceID {
+	ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
+};
+
+class Board;
 
 class Piece {
 	int row;
@@ -39,16 +42,15 @@ public:
 	void setBlockingVector(long blockingVector);
 	void clearBlocking();
 	long getBlockingVector();
-	static Piece fromString(string stringPiece, int row, int col);
 	static PieceID charIDtoPieceID(char type);
-	bool equals(Piece piece);
+	bool equals(Piece * piece);
 	bool isValidMove(int, int, long[]);
 	PieceID getPieceID();
 	void setPieceID(PieceID id);
-//	void generateValidMoves(Board, long[], long[], vector<long>);
-//	void getNullMoveInfo(Board, long[], long, long, long, long, long, long);
-//	void getNullMoveInfo(Board, long[]);
-	Piece getCopy();
+	void generateValidMoves(Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
+	void getNullMoveInfo(Board*, long*, long, long, long, long, long, long);
+	void getNullMoveInfo(Board*, long*);
+	Piece * getCopy();
 };
 }
 #endif /* PIECE_H_ */

@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Pawn.h"
+#include "stdafx.h"
 namespace OhWordC {
 Pawn::Pawn() {
 	// TODO Auto-generated constructor stub

@@ -5,12 +5,12 @@
  *      Author: walker
  */
 
-#include "Piece.h"
+#include "stdafx.h"
 namespace OhWordC {
 Piece::Piece() {
-	this->id = -1;
+	this->id = (PieceID) -1;
 	this->moved = false;
-	this->player = -1;
+	this->player = (side_t) -1;
 	this->row = -1;
 	this->col = -1;
 	this->blockingVector = -1;
@@ -75,7 +75,7 @@ long Piece::getBlockingVector() {
 	return blockingVector;
 }
 
-static PieceID Piece::charIDtoPieceID(char type) {
+PieceID Piece::charIDtoPieceID(char type) {
 
 	PieceID id;
 
@@ -99,20 +99,20 @@ static PieceID Piece::charIDtoPieceID(char type) {
 		id = PAWN;
 		break;
 	default:
-		id = -1;
+		id = (PieceID) -1;
 		break;
 	}
 
 	return id;
 }
 
-bool Piece::equals(Piece piece) {
+bool Piece::equals(Piece * piece) {
 
 	if (piece == 0) {
 		return false;
 	}
 
-	if (piece.getRow() == row && piece.getCol() == col && piece.getSide() == player && piece.getPieceID() == this->getPieceID()) {
+	if (piece->getRow() == row && piece->getCol() == col && piece->getSide() == player && piece->getPieceID() == this->getPieceID()) {
 		return true;
 	} else {
 		return false;
@@ -210,8 +210,8 @@ void Piece::getNullMoveInfo(Board* board, long* nullMoveBitBoards) {
 	}
 }
 
-Piece Piece::getCopy() {
-	return new Piece(id, player, row, col, moved);
+Piece* Piece::getCopy() {
+	return new Piece(this->id, this->player, this->row, this->col, this->moved);
 }
 
 Piece::~Piece() {

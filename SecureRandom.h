@@ -7,7 +7,7 @@
 
 #ifndef SECURERANDOM_H_
 #define SECURERANDOM_H_
-#include "stdafx.h"
+
 namespace OhWordC {
 
 class SecureRandom {

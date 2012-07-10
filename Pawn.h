@@ -7,7 +7,7 @@
 
 #ifndef PAWN_H_
 #define PAWN_H_
-#include "stdafx.h"
+
 using namespace std;
 namespace OhWordC {
 class Pawn {

@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Values.h"
+#include "stdafx.h"
 namespace OhWordC {
 Values::Values() {
 	// TODO Auto-generated constructor stub

@@ -5,7 +5,7 @@
  *      Author: Caleb
  */
 
-#include "PositionBonus.h"
+#include "stdafx.h"
 
 namespace OhWordC {
 

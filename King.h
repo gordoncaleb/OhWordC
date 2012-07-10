@@ -7,7 +7,7 @@
 
 #ifndef KING_H_
 #define KING_H_
-#include "stdafx.h"
+
 using namespace std;
 namespace OhWordC {
 class King {

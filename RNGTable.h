@@ -7,7 +7,7 @@
 
 #ifndef RNGTABLE_H_
 #define RNGTABLE_H_
-#include "stdafx.h"
+
 namespace OhWordC {
 class RNGTable {
 	static int seed [8];

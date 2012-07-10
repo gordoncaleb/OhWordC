@@ -5,7 +5,7 @@
  *      Author: Caleb
  */
 
-#include "SecureRandom.h"
+#include "stdafx.h"
 
 namespace OhWordC {
 

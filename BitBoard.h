@@ -8,8 +8,6 @@
 #ifndef BITBOARD_H_
 #define BITBOARD_H_
 
-#include "stdafx.h"
-
 using namespace std;
 namespace OhWordC {
 class BitBoard {

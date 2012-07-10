@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Move.h"
+#include "stdafx.h"
 namespace OhWordC {
 /**
  * Bit-field 0-2 = toCol 3-5 = toRow 6-8 = fromCol 9-11 = fromRow 12-14 =

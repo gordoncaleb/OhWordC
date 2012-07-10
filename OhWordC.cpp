@@ -8,10 +8,7 @@
  ============================================================================
  */
 
-#include <iostream>
-#include <stdio.h>
-
-#include "Math.h"
+#include "stdafx.h"
 
 using namespace std;
 using namespace OhWordC;
