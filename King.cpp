@@ -13,19 +13,19 @@ King::King() {
 
 }
 
-static PieceID King::getPieceID() {
+PieceID King::getPieceID() {
 	return KING;
 }
 
-static string King::getName() {
+string King::getName() {
 	return "King";
 }
 
-static string King::getStringID() {
+string King::getStringID() {
 	return "K";
 }
 
-static void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
+void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -87,7 +87,7 @@ static void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
 	// }
 }
 
-static vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -157,7 +157,7 @@ static vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullM
 
 }
 
-static void King::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void King::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
@@ -170,7 +170,7 @@ static void King::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 
 }
 
-static long King::getKingCheckVectors(long king, long updown, long left, long right){
+long King::getKingCheckVectors(long king, long updown, long left, long right){
 	unsigned long temp = king;
 
 	unsigned long checkVectors = king;
@@ -236,7 +236,7 @@ static long King::getKingCheckVectors(long king, long updown, long left, long ri
 	return checkVectors;
 }
 
-static bool King::isValidMove(int toRow, int toCol, long* nullMoveInfo) {
+bool King::isValidMove(int toRow, int toCol, long* nullMoveInfo) {
 	long mask = BitBoard::getMask(toRow, toCol);
 
 	// String nullmove0 = BitBoard.printBitBoard(nullMoveInfo[0]);
@@ -250,7 +250,7 @@ static bool King::isValidMove(int toRow, int toCol, long* nullMoveInfo) {
 	}
 }
 
-static bool King::canCastleFar(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
+bool King::canCastleFar(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
 
 	if (board->kingHasMoved(player) || board->farRookHasMoved(player)) {
 		return false;
@@ -273,7 +273,7 @@ static bool King::canCastleFar(Piece* king, Board* board, side_t player, long* n
 
 }
 
-static bool King::canCastleNear(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
+bool King::canCastleNear(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
 
 	if (board->kingHasMoved(player) || board->nearRookHasMoved(player)) {
 		return false;

@@ -10,19 +10,25 @@
 namespace OhWordC {
 
 Board::Board() {
-	this->board  = new Piece*[8];
+	//board  = new Piece*[8];
 
-	this->pieces[WHITE] = new vector<Piece>();
-	this->pieces[BLACK] = new vector<Piece>();
+	for (int r = 0; r < 8; r++) {
+		for (int c = 0; c < 8; c++) {
+			board[8][8] = (Piece *) 0;
+		}
+	}
 
-	this->piecesTaken[WHITE] = new vector<Piece>();
-	this->piecesTaken[BLACK] = new vector<Piece>();
+	pieces[WHITE] = new vector<Piece*>();
+	pieces[BLACK] = new vector<Piece*>();
 
-	this->moveHistory = new vector<Move>();
-	this->hashCodeHistory = new vector<long>();
-	this->rngTable = RNGTable::getSingleton();
-	this->turn = WHITE;
-	this->nullMoveInfo = new long[3];
+	piecesTaken[WHITE] = new vector<Piece*>();
+	piecesTaken[BLACK] = new vector<Piece*>();
+
+	//this->moveHistory = new vector<Move>();
+	//this->hashCodeHistory = new vector<long>();
+	rngTable = RNGTable::getSingleton();
+	turn = WHITE;
+	//this->nullMoveInfo = new long[3];
 
 	kings[BLACK] = new Piece(KING, BLACK, -1, -1, false);
 	kings[WHITE] = new Piece(KING, WHITE, -1, -1, false);
@@ -32,30 +38,41 @@ Board::Board() {
 
 }
 
-Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int** rookStartCols, int* kingCols) {
-	this->validMoves = new vector<long>(100);
-	this->pieces = new vector[2];
-	this->piecesTaken = new vector[2];
-	this->kings = new Piece[2];
-	this->materialRow [2] = {0, 7};
-	this->nullMoveInfo [3] = {0, -1, 0};
-	this->posBitBoard [6][2] = new long[6][2];
-	this->allPosBitBoard [2] = new long[2];
+Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[][], int kingCols[]) {
 
-	this->board = new Piece[8][8];
-	this->pieces[WHITE] = new vector<Piece>(pieces[WHITE].size());
-	this->pieces[BLACK] = new vector<Piece>(pieces[BLACK].size());
+	for (int r = 0; r < 8; r++) {
+		for (int c = 0; c < 8; c++) {
+			board[8][8] = (Piece *) 0;
+		}
+	}
 
-	this->piecesTaken[WHITE] = new vector<Piece>();
-	this->piecesTaken[BLACK] = new vector<Piece>();
+	//this->validMoves = new vector<long>(100);
+	//this->pieces = new vector[2];
+	//this->piecesTaken = new vector[2];
+	//this->kings = new Piece[2];
+	materialRow[0] = 0;
+	materialRow[1] = 7;
 
-	this->moveHistory = new stack<Move>();
-	this->hashCodeHistory = new stack<long>();
-	this->rngTable = RNGTable::getSingleton();
+	nullMoveInfo[0] = 0;
+	nullMoveInfo[1] = -1;
+	nullMoveInfo[2] = 0;
+	//this->posBitBoard [6][2] = new long[6][2];
+	//this->allPosBitBoard [2] = new long[2];
+
+	board = new Piece*[8];
+	pieces[WHITE] = new vector<Piece*>();
+	pieces[BLACK] = new vector<Piece*>();
+
+	piecesTaken[WHITE] = new vector<Piece*>();
+	piecesTaken[BLACK] = new vector<Piece*>();
+
+	//this->moveHistory = new vector<Move>();
+	//this->hashCodeHistory = new stack<long>();
+	rngTable = RNGTable::getSingleton();
 	this->turn = turn;
-	this->nullMoveInfo = new long[3];
+	//this->nullMoveInfo = new long[3];
 
-	long** posBitBoard = new long[6][2];
+	//long** posBitBoard = new long[6][2];
 	// long[] pawnPosBitboard = { 0, 0 };
 	// long[] kingPosBitboard = { 0, 0 };
 
@@ -63,39 +80,39 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 	pawnRow[BLACK] = 1;
 	pawnRow[WHITE] = 6;
 
-	Piece temp;
+	Piece * temp;
 
 	for (int i = 0; i < 2; i++) {
 
-		for (int p = 0; p < pieces[i].size(); p++) {
-			temp = pieces[i].at(p).getCopy();
+		for (int p = 0; p < (int) pieces[i]->size(); p++) {
+			temp = pieces[i]->at(p)->getCopy();
 
-			this->pieces[i].push_back(temp);
+			pieces[i]->push_back(temp);
 
-			board[temp.getRow()][temp.getCol()] = temp;
+			board[temp->getRow()][temp->getCol()] = *temp;
 
-			posBitBoard[temp.getPieceID()][i] |= temp.getBit();
+			posBitBoard[temp->getPieceID()][i] |= temp->getBit();
 
-			if (temp.getPieceID() == PAWN) {
+			if (temp->getPieceID() == PAWN) {
 
-				if (temp.getRow() != pawnRow[i]) {
-					temp.setMoved(true);
+				if (temp->getRow() != pawnRow[i]) {
+					temp->setMoved(true);
 				}
 			}
 
-			if (temp.getPieceID() == KING) {
+			if (temp->getPieceID() == KING) {
 
 				kings[i] = temp;
 
-				if (temp.getRow() != materialRow[i]) {
-					temp.setMoved(true);
+				if (temp->getRow() != materialRow[i]) {
+					temp->setMoved(true);
 				}
 			}
 		}
 
 	}
 
-	this->posBitBoard = posBitBoard;
+	//this->posBitBoard = posBitBoard;
 
 	for (int i = 0; i < 6; i++) {
 		this->allPosBitBoard[0] |= posBitBoard[i][0];
@@ -104,25 +121,25 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 
 	this->hashCode = generateHashCode();
 
-	if (moveHistory.size() > 0) {
+	if (moveHistory->size() > 0) {
 		long move;
 		side_t moveSide;
-		if (moveHistory.size() % 2 == 0) {
+		if (moveHistory->size() % 2 == 0) {
 			moveSide = turn;
 		} else {
 			moveSide = Side::otherSide(turn);
 		}
 
-		for (int i = 0; i < moveHistory.size(); i++) {
-			move = moveHistory.back().getMoveLong();
-			moveHistory.pop_back();
+		for (int i = 0; i < (int) moveHistory->size(); i++) {
+			move = moveHistory->back()->getMoveLong();
+			moveHistory->pop_back();
 
-			this->moveHistory.push_back(*(new Move(move)));
+			this->moveHistory->push_back(new Move(move));
 
 			if (Move::hasPieceTaken(move)) {
-				piecesTaken[Side::otherSide(moveSide)].push_back(
-						*(new Piece(Move::getPieceTakenID(move), Side::otherSide(moveSide), Move::getPieceTakenRow(move), Move::getPieceTakenCol(move),
-								Move::getPieceTakenHasMoved(move))));
+				piecesTaken[Side::otherSide(moveSide)]->push_back(
+						new Piece(Move::getPieceTakenID(move), Side::otherSide(moveSide), Move::getPieceTakenRow(move), Move::getPieceTakenCol(move),
+								Move::getPieceTakenHasMoved(move)));
 			}
 
 			moveSide = Side::otherSide(moveSide);
@@ -135,8 +152,8 @@ Board::Board(vector<Piece>* pieces, side_t turn, vector<Move> moveHistory, int**
 	if (kingCols == 0 || rookStartCols == 0) {
 		initializeCastleSetup();
 	} else {
-		this->kingCols = kingCols;
-		this->rookStartCols = rookStartCols;
+		((Board *)this)->kingCols = kingCols;
+		((Board *)this)->rookStartCols = rookStartCols;
 	}
 
 	// this.castleRights = castleRights;
@@ -163,7 +180,7 @@ bool Board::makeMove(long move) {
 		Piece pieceTaken = board[Move::getPieceTakenRow(move)][Move::getPieceTakenCol(move)];
 
 		// remove pieceTaken from vectors
-		pieces[Side::otherSide(turn)].erase(find(pieces[Side::otherSide(turn)].begin(),pieces[Side::otherSide(turn)].end(),pieceTaken));
+		pieces[Side::otherSide(turn)].erase(find(pieces[Side::otherSide(turn)].begin(), pieces[Side::otherSide(turn)].end(), pieceTaken));
 
 		// // remove bit position from appropriate side
 		// allPosBitBoard[pieceTaken.getSide().ordinal()] ^=
@@ -910,7 +927,7 @@ bool Board::placePiece(Piece piece, int toRow, int toCol) {
 			allPosBitBoard[pieceTaken.getSide()] ^= pieceTaken.getBit();
 
 			// remove ref to piece taken
-			pieces[pieceTaken.getSide()].erase(find(pieces[pieceTaken.getSide()].begin(),pieces[pieceTaken.getSide()].end(),pieceTaken));
+			pieces[pieceTaken.getSide()].erase(find(pieces[pieceTaken.getSide()].begin(), pieces[pieceTaken.getSide()].end(), pieceTaken));
 		}
 
 		// tell piece where it is now
@@ -925,7 +942,7 @@ bool Board::placePiece(Piece piece, int toRow, int toCol) {
 	} else {
 		// piece is being taken off the board. Remove
 		if (piece.getPieceID() != KING) {
-			pieces[piece.getSide()].erase(find(pieces[piece.getSide()].begin(),pieces[piece.getSide()].end(),piece));
+			pieces[piece.getSide()].erase(find(pieces[piece.getSide()].begin(), pieces[piece.getSide()].end(), piece));
 		}
 	}
 
@@ -1011,7 +1028,7 @@ long Board::nearCastleMask(side_t player) {
 	return BitBoard::getCastleMask(kings[player].getCol(), Math::max(rookStartCols[player][1], 6), player);
 }
 
-Board Board::getCopy() {
+Board * Board::getCopy() {
 	return new Board(pieces, this->turn, moveHistory, rookStartCols, kingCols);
 }
 
@@ -1209,7 +1226,7 @@ void Board::loadPiecesTaken() {
 
 }
 
-static vector<Piece> Board::getFullPieceSet(side_t player) {
+static vector<Piece> * Board::getFullPieceSet(side_t player) {
 	vector<Piece> pieces = new vector<Piece>();
 
 	for (int i = 0; i < 8; i++) {

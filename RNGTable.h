@@ -11,8 +11,8 @@
 namespace OhWordC {
 class RNGTable {
 	static int seed [8];
-	static RNGTable singleton;
-	SecureRandom rng;
+	static RNGTable * singleton;
+	SecureRandom * rng;
 	long piecePerSquare [2][6][8][8];
 	long blackToMove;
 	long castlingRights [2][2][2][2];
@@ -21,7 +21,7 @@ class RNGTable {
 
 public:
 	RNGTable();
-	static RNGTable getSingleton();
+	static RNGTable * getSingleton();
 	long randomLong();
 	void generatePiecePerSquare();
 	long getPiecePerSquareRandom(side_t player, PieceID id, int row, int col);
@@ -33,5 +33,8 @@ public:
 	long getEnPassantFile(int file);
 	virtual ~RNGTable();
 };
+
+int RNGTable::seed [8] =  {-52, 45, -101, 26, -51, -99, -84, -79};
+
 }
 #endif /* RNGTABLE_H_ */

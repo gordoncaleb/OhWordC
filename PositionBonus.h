@@ -22,8 +22,8 @@ public:
 
 	PositionBonus();
 	static void applyScale();
-	static void printBonus(int** bonus, string name);
-	static void scalePositionBonus(int** bonus, double scale);
+	static void printBonus(int bonus[8][8], string name);
+	static void scalePositionBonus(int bonus[8][8], double scale);
 	static int getKnightMoveBonus(int fromRow, int fromCol, int toRow, int toCol, side_t player);
 	static int getKnightPositionBonus(int row, int col, side_t player);
 	static int getKingOpeningPositionBonus(int row, int col, side_t player);

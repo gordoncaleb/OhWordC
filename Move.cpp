@@ -15,48 +15,48 @@ namespace OhWordC {
  */
 
 Move::Move(int fromRow, int fromCol, int toRow, int toCol) {
-	move = 0;
-	this(fromRow, fromCol, toRow, toCol, 0, NONE, 0, false);
+	setMoveLong(fromRow, fromCol, toRow, toCol, (MoveNote) 0, NONE, (Piece*) 0, false);
 }
 
 Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value) {
-	move = 0;
-	this(fromRow, fromCol, toRow, toCol, value, NONE, 0, false);
+	setMoveLong(fromRow, fromCol, toRow, toCol, value, NONE, (Piece *) 0, false);
 }
 
 Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note) {
-	move = 0;
-	this(fromRow, fromCol, toRow, toCol, value, note, 0, false);
+	setMoveLong(fromRow, fromCol, toRow, toCol, value, note, (Piece *) 0, false);
 }
 
 Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken) {
-	move = 0;
-	this(fromRow, fromCol, toRow, toCol, 0, note, pieceTaken, false);
+	setMoveLong(fromRow, fromCol, toRow, toCol, 0, note, &pieceTaken, false);
 }
 
 Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken, bool hadMoved) {
-	move = Move::moveLong(fromRow, fromCol, toRow, toCol, value, note, pieceTaken, hadMoved);
+	setMoveLong(fromRow, fromCol, toRow, toCol, value, note, &pieceTaken, hadMoved);
+}
+
+void Move::setMoveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece * pieceTaken, bool hadMoved) {
+	move = moveLong(fromRow, fromCol, toRow, toCol, value, note, pieceTaken, hadMoved);
 }
 
 // -------------------------------------------------------
 
- long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol) {
-	return Move::moveLong(fromRow, fromCol, toRow, toCol, 0, NONE, (Piece)0, false);
+long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol) {
+	return moveLong(fromRow, fromCol, toRow, toCol, 0, NONE, (Piece*) 0, false);
 }
 
- long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value) {
-	return Move::moveLong(fromRow, fromCol, toRow, toCol, value, NONE, (Piece)0, false);
+long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value) {
+	return moveLong(fromRow, fromCol, toRow, toCol, value, NONE, (Piece*) 0, false);
 }
 
- long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note) {
-	return Move::moveLong(fromRow, fromCol, toRow, toCol, value, note, (Piece)0, false);
+long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note) {
+	return moveLong(fromRow, fromCol, toRow, toCol, value, note, (Piece*) 0, false);
 }
 
- long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken) {
-	return Move::moveLong(fromRow, fromCol, toRow, toCol, value, note, pieceTaken, false);
+long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece * pieceTaken) {
+	return moveLong(fromRow, fromCol, toRow, toCol, value, note, pieceTaken, false);
 }
 
- long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken, bool hadMoved) {
+long Move::moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece * pieceTaken, bool hadMoved) {
 	long moveLong;
 
 	moveLong = (note << 12) | (fromRow << 9) | (fromCol << 6) | (toRow << 3) | toCol;
@@ -66,9 +66,9 @@ Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote n
 	}
 
 	if (pieceTaken != 0) {
-		moveLong |= (pieceTaken.getPieceID() << 23) | (pieceTaken.getRow() << 20) | (pieceTaken.getCol() << 17) | hasPieceTakenMask;
+		moveLong |= (pieceTaken->getPieceID() << 23) | (pieceTaken->getRow() << 20) | (pieceTaken->getCol() << 17) | hasPieceTakenMask;
 
-		if (pieceTaken.hasMoved()) {
+		if (pieceTaken->hasMoved()) {
 			moveLong |= pieceTakenHasMoved;
 		}
 	}
@@ -79,10 +79,10 @@ Move::Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote n
 }
 
 Move::Move(long moveInt) {
-	this->move = moveInt;
+	move = moveInt;
 }
 
- bool Move::equals(long moveLongA, long moveLongB) {
+bool Move::equals(long moveLongA, long moveLongB) {
 
 	if ((moveLongA & fromToMask) == (moveLongB & fromToMask))
 		return true;
@@ -90,7 +90,7 @@ Move::Move(long moveInt) {
 		return false;
 }
 
- bool Move::fromEquals(long moveLongA, long moveLongB) {
+bool Move::fromEquals(long moveLongA, long moveLongB) {
 
 	if ((moveLongA & fromMask) == (moveLongB & fromMask))
 		return true;
@@ -98,7 +98,7 @@ Move::Move(long moveInt) {
 		return false;
 }
 
- bool Move::toEquals(long moveLongA, long moveLongB) {
+bool Move::toEquals(long moveLongA, long moveLongB) {
 
 	if ((moveLongA & toMask) == (moveLongB & toMask))
 		return true;
@@ -113,7 +113,7 @@ long Move::setNote(MoveNote note) {
 	return move;
 }
 
- long Move::setNote(long moveLong, MoveNote note) {
+long Move::setNote(long moveLong, MoveNote note) {
 	moveLong &= notNoteMask;
 	moveLong |= (note << 12);
 
@@ -121,51 +121,51 @@ long Move::setNote(MoveNote note) {
 }
 
 MoveNote Move::getNote() {
-	return ((this->move >> 12) & 0x7);
+	return (MoveNote) ((move >> 12) & 0x7);
 }
 
- MoveNote Move::getNote(long moveLong) {
-	return ((move >> 12) & 0x7);
+MoveNote Move::getNote(long moveLong) {
+	return (MoveNote) ((moveLong >> 12) & 0x7);
 }
 
 int Move::getFromRow() {
 	return ((move >> 9) & 0x7);
 }
 
- int Move::getFromRow(long moveLong) {
-	return ((move >> 9) & 0x7);
+int Move::getFromRow(long moveLong) {
+	return ((moveLong >> 9) & 0x7);
 }
 
 int Move::getFromCol() {
 	return ((move >> 6) & 0x7);
 }
 
- int Move::getFromCol(long moveLong) {
-	return ((move >> 6) & 0x7);
+int Move::getFromCol(long moveLong) {
+	return ((moveLong >> 6) & 0x7);
 }
 
 int Move::getToRow() {
 	return ((move >> 3) & 0x7);
 }
 
- int Move::getToRow(long moveLong) {
-	return ((move >> 3) & 0x7);
+int Move::getToRow(long moveLong) {
+	return ((moveLong >> 3) & 0x7);
 }
 
 int Move::getToCol() {
 	return (int) (move & 0x7);
 }
 
- int Move::getToCol(long moveLong) {
-	return (int) (move & 0x7);
+int Move::getToCol(long moveLong) {
+	return (int) (moveLong & 0x7);
 }
 
 int Move::getValue() {
 	return (int) (move >> 32);
 }
 
- int Move::getValue(long moveLong) {
-	return (int) (move >> 32);
+int Move::getValue(long moveLong) {
+	return (int) (moveLong >> 32);
 }
 
 long Move::setValue(int value) {
@@ -175,7 +175,7 @@ long Move::setValue(int value) {
 	return move;
 }
 
- long Move::setValue(long moveLong, int value) {
+long Move::setValue(long moveLong, int value) {
 	moveLong = moveLong & 0xFFFFFFFFL;
 
 	moveLong |= ((long) value) << 32;
@@ -183,12 +183,12 @@ long Move::setValue(int value) {
 	return moveLong;
 }
 
-long Move::setPieceTaken(Piece pieceTaken) {
+long Move::setPieceTaken(Piece* pieceTaken) {
 	move &= notPieceTaken;
 	if (pieceTaken != 0) {
-		move |= (pieceTaken.getPieceID() << 23) | (pieceTaken.getRow() << 20) | (pieceTaken.getCol() << 17) | hasPieceTakenMask;
+		move |= (pieceTaken->getPieceID() << 23) | (pieceTaken->getRow() << 20) | (pieceTaken->getCol() << 17) | hasPieceTakenMask;
 
-		if (pieceTaken.hasMoved()) {
+		if (pieceTaken->hasMoved()) {
 			move |= pieceTakenHasMoved;
 		}
 	}
@@ -196,12 +196,12 @@ long Move::setPieceTaken(Piece pieceTaken) {
 	return move;
 }
 
- long Move::setPieceTaken(long moveLong, Piece pieceTaken) {
+long Move::setPieceTaken(long moveLong, Piece* pieceTaken) {
 	moveLong &= notPieceTaken;
 	if (pieceTaken != 0) {
-		moveLong |= (pieceTaken.getPieceID() << 23) | (pieceTaken.getRow() << 20) | (pieceTaken.getCol() << 17) | hasPieceTakenMask;
+		moveLong |= (pieceTaken->getPieceID() << 23) | (pieceTaken->getRow() << 20) | (pieceTaken->getCol() << 17) | hasPieceTakenMask;
 
-		if (pieceTaken.hasMoved()) {
+		if (pieceTaken->hasMoved()) {
 			moveLong |= pieceTakenHasMoved;
 		}
 	}
@@ -213,7 +213,7 @@ bool Move::hadMoved() {
 	return ((move & hadMovedMask) != 0);
 }
 
- bool Move::hadMoved(long moveLong) {
+bool Move::hadMoved(long moveLong) {
 	return ((moveLong & hadMovedMask) != 0);
 }
 
@@ -227,7 +227,7 @@ long Move::setHadMoved(bool hadMoved) {
 	return move;
 }
 
- long Move::setHadMoved(long moveLong, bool hadMoved) {
+long Move::setHadMoved(long moveLong, bool hadMoved) {
 	if (hadMoved) {
 		moveLong |= hadMovedMask;
 	} else {
@@ -241,7 +241,7 @@ bool Move::hasPieceTaken() {
 	return ((move & hasPieceTakenMask) != 0);
 }
 
- bool Move::hasPieceTaken(long moveLong) {
+bool Move::hasPieceTaken(long moveLong) {
 	return ((moveLong & hasPieceTakenMask) != 0);
 }
 
@@ -249,7 +249,7 @@ bool Move::getPieceTakenHasMoved() {
 	return ((move & pieceTakenHasMoved) != 0);
 }
 
- bool Move::getPieceTakenHasMoved(long moveLong) {
+bool Move::getPieceTakenHasMoved(long moveLong) {
 	return ((moveLong & pieceTakenHasMoved) != 0);
 }
 
@@ -257,7 +257,7 @@ int Move::getPieceTakenRow() {
 	return (int) ((move >> 20) & 0x7);
 }
 
- int Move::getPieceTakenRow(long moveLong) {
+int Move::getPieceTakenRow(long moveLong) {
 	return (int) ((moveLong >> 20) & 0x7);
 }
 
@@ -265,19 +265,19 @@ int Move::getPieceTakenCol() {
 	return (int) ((move >> 17) & 0x7);
 }
 
- int Move::getPieceTakenCol(long moveLong) {
+int Move::getPieceTakenCol(long moveLong) {
 	return (int) ((moveLong >> 17) & 0x7);
 }
 
 PieceID Move::getPieceTakenID() {
-	return ((move >> 23) & 0x7);
+	return (PieceID)((move >> 23) & 0x7);
 }
 
- PieceID Move::getPieceTakenID(long moveLong) {
-	return ((moveLong >> 23) & 0x7);
+PieceID Move::getPieceTakenID(long moveLong) {
+	return (PieceID)((moveLong >> 23) & 0x7);
 }
 
-Move Move::getCopy() {
+Move * Move::getCopy() {
 	return new Move(move);
 }
 

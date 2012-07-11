@@ -8,7 +8,6 @@
 #include "stdafx.h"
 namespace OhWordC {
 RNGTable::RNGTable() {
-	this->seed = {-52, 45, -101, 26, -51, -99, -84, -79}
 	rng = new SecureRandom(seed);
 	generatePiecePerSquare();
 	generateBlackToMove();
@@ -16,7 +15,7 @@ RNGTable::RNGTable() {
 	generateEnPassantFile();
 }
 
-static RNGTable RNGTable::getSingleton() {
+RNGTable* RNGTable::getSingleton() {
 	if (singleton == 0) {
 		singleton = new RNGTable();
 	}
@@ -24,13 +23,13 @@ static RNGTable RNGTable::getSingleton() {
 }
 
 long RNGTable::randomLong() {
-	return rng.nextLong();
+	return rng->nextLong();
 }
 
 void RNGTable::generatePiecePerSquare() {
 	int numPieceType = 6;
 
-	piecePerSquare = new long[2][numPieceType][8][8];
+	//piecePerSquare = new long[2][numPieceType][8][8];
 
 	for (int player = 0; player < 2; player++) {
 		for (int pieceType = 0; pieceType < numPieceType; pieceType++) {
@@ -57,7 +56,7 @@ long RNGTable::getBlackToMoveRandom() {
 }
 
 void RNGTable::generateCastlingRights() {
-	castlingRights = new long[2][2][2][2];
+	//castlingRights = new long[2][2][2][2];
 
 	for (int br = 0; br < 2; br++) {
 		for (int bl = 0; bl < 2; bl++) {
@@ -100,7 +99,7 @@ long RNGTable::getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bo
 }
 
 void RNGTable::generateEnPassantFile() {
-	enPassantFile = new long[8];
+	//enPassantFile = new long[8];
 	for (int f = 0; f < 8; f++) {
 		enPassantFile[f] = randomLong();
 	}

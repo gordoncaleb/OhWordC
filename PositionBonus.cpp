@@ -14,7 +14,7 @@ PositionBonus::PositionBonus() {
 
 }
 
-static void PositionBonus::applyScale() {
+void PositionBonus::applyScale() {
 	scalePositionBonus(pawnBonus, 0.5);
 	scalePositionBonus(rookBonus, 0.5);
 	scalePositionBonus(kingEndGameBonus, 0.5);
@@ -28,9 +28,9 @@ static void PositionBonus::applyScale() {
 	printBonus(knightBonus, "knight");
 }
 
-static void PositionBonus::printBonus(int** bonus, string name) {
+void PositionBonus::printBonus(int bonus[8][8], string name) {
 
-	printf(name + " Bonus{");
+	printf("%s + Bonus{", name.c_str());
 	for (int i = 0; i < 8; i++) {
 		for (int y = 0; y < 8; y++) {
 			printf("%3d,", bonus[i][y]);
@@ -41,7 +41,7 @@ static void PositionBonus::printBonus(int** bonus, string name) {
 	printf("}");
 }
 
-static void PositionBonus::scalePositionBonus(int** bonus, double scale) {
+void PositionBonus::scalePositionBonus(int bonus[8][8], double scale) {
 	for (int r = 0; r < 8; r++) {
 		for (int c = 0; c < 8; c++) {
 			bonus[r][c] = (int) (bonus[r][c] * scale);
@@ -49,7 +49,7 @@ static void PositionBonus::scalePositionBonus(int** bonus, double scale) {
 	}
 }
 
-static int PositionBonus::getKnightMoveBonus(int fromRow, int fromCol, int toRow, int toCol, side_t player) {
+int PositionBonus::getKnightMoveBonus(int fromRow, int fromCol, int toRow, int toCol, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = knightBonus[toRow][toCol] - knightBonus[fromRow][fromCol];
@@ -59,7 +59,7 @@ static int PositionBonus::getKnightMoveBonus(int fromRow, int fromCol, int toRow
 	return bonus;
 }
 
-static int PositionBonus::getKnightPositionBonus(int row, int col, side_t player) {
+int PositionBonus::getKnightPositionBonus(int row, int col, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = knightBonus[row][col];
@@ -69,7 +69,7 @@ static int PositionBonus::getKnightPositionBonus(int row, int col, side_t player
 	return bonus;
 }
 
-static int PositionBonus::getKingOpeningPositionBonus(int row, int col, side_t player) {
+int PositionBonus::getKingOpeningPositionBonus(int row, int col, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = kingOpeningBonus[row][col];
@@ -79,7 +79,7 @@ static int PositionBonus::getKingOpeningPositionBonus(int row, int col, side_t p
 	return bonus;
 }
 
-static int PositionBonus::getKingEndGamePositionBonus(int row, int col, side_t player) {
+int PositionBonus::getKingEndGamePositionBonus(int row, int col, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = kingEndGameBonus[row][col];
@@ -89,11 +89,11 @@ static int PositionBonus::getKingEndGamePositionBonus(int row, int col, side_t p
 	return bonus;
 }
 
-static int PositionBonus::getRookBonus(int row, int col) {
+int PositionBonus::getRookBonus(int row, int col) {
 	return rookBonus[row][col];
 }
 
-static int PositionBonus::getPawnMoveBonus(int fromRow, int fromCol, int toRow, int toCol, side_t player) {
+int PositionBonus::getPawnMoveBonus(int fromRow, int fromCol, int toRow, int toCol, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = pawnBonus[toRow][toCol] - pawnBonus[fromRow][fromCol];
@@ -103,7 +103,7 @@ static int PositionBonus::getPawnMoveBonus(int fromRow, int fromCol, int toRow, 
 	return bonus;
 }
 
-static int PositionBonus::getPawnPositionBonus(int row, int col, side_t player) {
+int PositionBonus::getPawnPositionBonus(int row, int col, side_t player) {
 	int bonus;
 	if (player == BLACK) {
 		bonus = pawnBonus[row][col];

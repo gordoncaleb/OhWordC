@@ -8,7 +8,6 @@
 #ifndef MOVE_H_
 #define MOVE_H_
 
-
 using namespace std;
 namespace OhWordC {
 enum MoveNote {
@@ -19,7 +18,7 @@ class Move {
 
 	static int hadMovedMask;
 	static int hasPieceTakenMask;
-	static int pieceTakenHasMoved ;
+	static int pieceTakenHasMoved;
 	static int fromToMask;
 	static int fromMask;
 	static int toMask;
@@ -35,12 +34,13 @@ public:
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note);
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken);
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken, bool hadMoved);
+	void setMoveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken, bool hadMoved);
 
 	static long moveLong(int fromRow, int fromCol, int toRow, int toCol);
 	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value);
 	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken, bool hadMoved);
+	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken);
+	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken, bool hadMoved);
 
 	bool equals(Move move);
 	static bool equals(long moveLongA, long moveLongB);
@@ -62,8 +62,8 @@ public:
 	static int getValue(long moveLong);
 	long setValue(int value);
 	static long setValue(long moveLong, int value);
-	long setPieceTaken(Piece pieceTaken);
-	static long setPieceTaken(long moveLong, Piece pieceTaken);
+	long setPieceTaken(Piece* pieceTaken);
+	static long setPieceTaken(long moveLong, Piece* pieceTaken);
 	bool hadMoved();
 	static bool hadMoved(long moveLong);
 	long setHadMoved(bool hadMoved);
@@ -78,20 +78,20 @@ public:
 	static int getPieceTakenCol(long moveLong);
 	PieceID getPieceTakenID();
 	static PieceID getPieceTakenID(long moveLong);
-	Move getCopy();
+	Move * getCopy();
 	long getMoveLong();
 
 	virtual ~Move();
 };
 
- int Move::hadMovedMask = 1 << 15;
- int Move::hasPieceTakenMask = 1 << 16;
- int Move::pieceTakenHasMoved = 1 << 26;
- int Move::fromToMask = 0xFFF;
- int Move::fromMask = 0xFC0;
- int Move::toMask = 0x3F;
- int Move::notNoteMask = ~(0x7000);
- int Move::notPieceTaken = ~(0x7FF << 16);
+int Move::hadMovedMask = 1 << 15;
+int Move::hasPieceTakenMask = 1 << 16;
+int Move::pieceTakenHasMoved = 1 << 26;
+int Move::fromToMask = 0xFFF;
+int Move::fromMask = 0xFC0;
+int Move::toMask = 0x3F;
+int Move::notNoteMask = ~(0x7000);
+int Move::notPieceTaken = ~(0x7FF << 16);
 
 }
 #endif /* MOVE_H_ */

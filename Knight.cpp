@@ -11,19 +11,19 @@ Knight::Knight() {
 	// TODO Auto-generated constructor stub
 
 }
-static PieceID Knight::getPieceID() {
+PieceID Knight::getPieceID() {
 	return KNIGHT;
 }
 
-static string Knight::getName() {
+string Knight::getName() {
 	return "Knight";
 }
 
-static string Knight::getStringID() {
+string Knight::getStringID() {
 	return "N";
 }
 
-static vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -79,7 +79,7 @@ static vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nul
 
 }
 
-static void Knight::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void Knight::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();

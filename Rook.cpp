@@ -12,19 +12,19 @@ Rook::Rook() {
 
 }
 
-static PieceID Rook::getPieceID() {
+PieceID Rook::getPieceID() {
 	return ROOK;
 }
 
-static string Rook::getName() {
+string Rook::getName() {
 	return "Rook";
 }
 
-static string Rook::getStringID() {
+string Rook::getStringID() {
 	return "R";
 }
 
-static void Rook::generateMoves(Piece* p, Board* board, vector<long> moves) {
+void Rook::generateMoves(Piece* p, Board* board, vector<long> moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -78,7 +78,7 @@ static void Rook::generateMoves(Piece* p, Board* board, vector<long> moves) {
 
 }
 
-static vector<long> Rook::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<long> Rook::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
@@ -147,7 +147,7 @@ static vector<long> Rook::generateValidMoves(Piece* p, Board* board, long* nullM
 
 }
 
-static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
+void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
 		long friendly) {
 
 	long bitPiece = piece->getBit();
@@ -178,7 +178,7 @@ static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo
 			if ((temp & friendly) != 0) {
 				temp = temp >> 8;
 				if ((temp & kingCheckVectors) != 0) {
-					board->getPiece(r - 1, c).setBlockingVector(BitBoard::getColMask(c));
+					board->getPiece(r - 1, c)->setBlockingVector(BitBoard::getColMask(c));
 				}
 			}
 		}
@@ -209,7 +209,7 @@ static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo
 			if ((temp & friendly) != 0) {
 				temp = temp << 8;
 				if ((temp & kingCheckVectors) != 0) {
-					board->getPiece(r + 1, c).setBlockingVector(BitBoard::getColMask(c));
+					board->getPiece(r + 1, c)->setBlockingVector(BitBoard::getColMask(c));
 				}
 			}
 		}
@@ -243,7 +243,7 @@ static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp >> 1;
 					if ((temp & kingCheckVectors) != 0) {
-						board->getPiece(r, c - 1).setBlockingVector(BitBoard::getRowMask(r));
+						board->getPiece(r, c - 1)->setBlockingVector(BitBoard::getRowMask(r));
 					}
 				}
 			}
@@ -280,7 +280,7 @@ static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo
 				if ((temp & friendly) != 0) {
 					temp = temp << 1;
 					if ((temp & kingCheckVectors) != 0) {
-						board->getPiece(r, c + 1).setBlockingVector(BitBoard::getRowMask(r));
+						board->getPiece(r, c + 1)->setBlockingVector(BitBoard::getRowMask(r));
 					}
 				}
 			}
@@ -290,11 +290,11 @@ static void Rook::getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo
 
 }
 
-static void Rook::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void Rook::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 	long bitAttackVector = 0;
 	long bitAttackCompliment = 0;
 	bool inCheck = false;
-	Piece blockingPiece;
+	Piece * blockingPiece;
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
@@ -330,7 +330,7 @@ static void Rook::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 		if (pieceStatus == ENEMY) {
 			blockingPiece = board->getPiece(nextRow, nextCol);
 
-			if (blockingPiece.getPieceID() == KING) {
+			if (blockingPiece->getPieceID() == KING) {
 				nullMoveInfo[1] &= (bitAttackVector | bitPosition);
 				inCheck = true;
 			}
@@ -349,8 +349,8 @@ static void Rook::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 			}
 
 			if (pieceStatus != OFF_BOARD) {
-				if (board->getPieceID(nextRow, nextCol) == KING && board->getPiece(nextRow, nextCol).getSide() != player) {
-					blockingPiece.setBlockingVector(bitAttackCompliment | bitAttackVector | bitPosition);
+				if (board->getPieceID(nextRow, nextCol) == KING && board->getPiece(nextRow, nextCol)->getSide() != player) {
+					blockingPiece->setBlockingVector(bitAttackCompliment | bitAttackVector | bitPosition);
 				}
 			}
 

@@ -14,9 +14,9 @@ namespace OhWordC {
 class BoardMaker {
 public:
 	BoardMaker();
-	static Board getStandardChessBoard();
-	static Board getRandomChess960Board();
-	static Board makeBoard(int r1, int r2, int r3, int r4, int r5);
+	static Board * getStandardChessBoard();
+	static Board * getRandomChess960Board();
+	static Board * makeBoard(int r1, int r2, int r3, int r4, int r5);
 	static int ithEmptyPosition(int i, PieceID* setup);
 	static int rollDie(int dieSize);
 	virtual ~BoardMaker();

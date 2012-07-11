@@ -5,7 +5,7 @@
  *      Author: walker
  */
 
-#include "Math.h"
+#include "stdafx.h"
 
 namespace OhWordC {
 Math::Math() {

@@ -12,19 +12,19 @@ Pawn::Pawn() {
 
 }
 
-static PieceID Pawn::getPieceID() {
+PieceID Pawn::getPieceID() {
 	return PAWN;
 }
 
-static string Pawn::getName() {
+string Pawn::getName() {
 	return "Pawn";
 }
 
-static string Pawn::getStringID() {
+string Pawn::getStringID() {
 	return "P";
 }
 
-static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -39,7 +39,7 @@ static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullM
 //		System.out.println(BitBoard.printBitBoard(nullMoveInfo[1]));
 //		System.out.println(BitBoard.printBitBoard(nullMoveInfo[2]));
 
-	int* lr = { 1, -1 };
+	int lr[2] = { 1, -1 };
 
 	if (player == WHITE) {
 		dir = -1;
@@ -58,12 +58,12 @@ static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullM
 			value = PositionBonus::getPawnMoveBonus(currentRow, currentCol, currentRow + dir, currentCol, p->getSide());
 
 			if ((currentRow + dir) == 0 || (currentRow + dir) == 7) {
-				moveLong = Move::setNote(moveLong, MoveNote::NEW_QUEEN);
+				moveLong = Move::setNote(moveLong, NEW_QUEEN);
 				value = Values::QUEEN_VALUE;
 			}
 
 			if ((nullMoveInfo[0] & BitBoard::getMask(currentRow + dir, currentCol)) != 0) {
-				value = -myValue >> 1;
+				value = -(myValue >> 1);
 			}
 
 			moveLong = Move::setValue(moveLong, value);
@@ -82,7 +82,7 @@ static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullM
 					value = -myValue >> 1;
 				}
 
-				validMoves.push_back(Move::moveLong(currentRow, currentCol, currentRow + 2 * dir, currentCol, value, MoveNote::PAWN_LEAP));
+				validMoves.push_back(Move::moveLong(currentRow, currentCol, currentRow + 2 * dir, currentCol, value, PAWN_LEAP));
 
 			}
 		}
@@ -100,12 +100,12 @@ static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullM
 				value = PositionBonus::getPawnMoveBonus(currentRow, currentCol, currentRow + dir, currentCol, p->getSide());
 
 				if ((currentRow + dir) == 0 || (currentRow + dir) == 7) {
-					moveLong = Move::setNote(moveLong, MoveNote::NEW_QUEEN);
+					moveLong = Move::setNote(moveLong, NEW_QUEEN);
 					value = Values::QUEEN_VALUE;
 				}
 
 				if ((nullMoveInfo[0] & BitBoard::getMask(currentRow + dir, currentCol + lr[i])) != 0) {
-					value = board->getPieceValue(currentRow + dir, currentCol + lr[i]) - myValue >> 1;
+					value = board->getPieceValue(currentRow + dir, currentCol + lr[i]) - (myValue >> 1);
 				} else {
 					value += board->getPieceValue(currentRow + dir, currentCol + lr[i]);
 				}
@@ -148,7 +148,7 @@ static vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullM
 
 }
 
-static void Pawn::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void Pawn::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
