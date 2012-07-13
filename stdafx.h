@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Math.h"
 #include "Side.h"
 #include "Piece.h"

@@ -12,6 +12,10 @@ Values::Values() {
 
 }
 
+int getPieceValue(PieceID id){
+	return Values::PIECE_VALUE[id];
+}
+
 Values::~Values() {
 	// TODO Auto-generated destructor stub
 }

@@ -10,12 +10,13 @@
 
 #include "stdafx.h"
 
-using namespace std;
-using namespace OhWordC;
+namespace OhWordC {
 
-int main(void) {
+int WinMain(void) {
 	printf("OhWordC");
 
-	printf("%f",OhWordC::Math::random());
+	printf("%f", 1.2);
 	return 0;
+}
+
 }

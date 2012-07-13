@@ -42,7 +42,7 @@ class Board {
 public:
 
 	Board();
-	Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[][2], int kingCols[]);
+	Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[2][2], int kingCols[2]);
 
 	bool makeMove(long move);
 	void movePiece(Piece * pieceMoving, int toRow, int toCol, MoveNote note);
@@ -57,8 +57,8 @@ public:
 	long getLastMoveMade();
 	vector<Move*> * getMoveHistory();
 	int getPieceValue(int row, int col);
-	int getOpeningPositionValue(Piece piece);
-	int getEndGamePositionValue(Piece piece);
+	int getOpeningPositionValue(Piece* piece);
+	int getEndGamePositionValue(Piece* piece);
 	int openingPositionScore(side_t side);
 	int endGamePositionScore(side_t side);
 	int materialScore(side_t side);

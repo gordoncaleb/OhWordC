@@ -38,7 +38,7 @@ Board::Board() {
 
 }
 
-Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[][], int kingCols[]) {
+Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[2][2], int kingCols[2]) {
 
 	for (int r = 0; r < 8; r++) {
 		for (int c = 0; c < 8; c++) {
@@ -59,7 +59,7 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 	//this->posBitBoard [6][2] = new long[6][2];
 	//this->allPosBitBoard [2] = new long[2];
 
-	board = new Piece*[8];
+	//board = new Piece[8][8];
 	pieces[WHITE] = new vector<Piece*>();
 	pieces[BLACK] = new vector<Piece*>();
 
@@ -89,7 +89,7 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 
 			pieces[i]->push_back(temp);
 
-			board[temp->getRow()][temp->getCol()] = *temp;
+			board[temp->getRow()][temp->getCol()] = temp;
 
 			posBitBoard[temp->getPieceID()][i] |= temp->getBit();
 
@@ -152,11 +152,15 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 	if (kingCols == 0 || rookStartCols == 0) {
 		initializeCastleSetup();
 	} else {
-		((Board *)this)->kingCols = kingCols;
-		((Board *)this)->rookStartCols = rookStartCols;
+		this->kingCols[0] = kingCols[0];
+		this->kingCols[1] = kingCols[1];
+		this->rookStartCols[0][0] = rookStartCols[0][0];
+		this->rookStartCols[0][1] = rookStartCols[0][1];
+		this->rookStartCols[1][0] = rookStartCols[1][0];
+		this->rookStartCols[1][1] = rookStartCols[1][1];
 	}
 
-	// this.castleRights = castleRights;
+// this.castleRights = castleRights;
 }
 
 bool Board::makeMove(long move) {
@@ -167,20 +171,20 @@ bool Board::makeMove(long move) {
 	int toCol = Move::getToCol(move);
 	MoveNote note = Move::getNote(move);
 
-	// save off hashCode
+// save off hashCode
 	hashCodeHistory.push_back(hashCode);
 
-	// remove previous castle options
-	hashCode ^= rngTable.getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
+// remove previous castle options
+	hashCode ^= rngTable->getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
 			this->farRookHasMoved(WHITE), this->nearRookHasMoved(WHITE), this->kingHasMoved(WHITE));
 
-	// remove taken piece first
+// remove taken piece first
 	if (Move::hasPieceTaken(move)) {
 
-		Piece pieceTaken = board[Move::getPieceTakenRow(move)][Move::getPieceTakenCol(move)];
+		Piece * pieceTaken = board[Move::getPieceTakenRow(move)][Move::getPieceTakenCol(move)];
 
 		// remove pieceTaken from vectors
-		pieces[Side::otherSide(turn)].erase(find(pieces[Side::otherSide(turn)].begin(), pieces[Side::otherSide(turn)].end(), pieceTaken));
+		pieces[Side::otherSide(turn)]->erase(find(pieces[Side::otherSide(turn)]->begin(), pieces[Side::otherSide(turn)]->end(), pieceTaken));
 
 		// // remove bit position from appropriate side
 		// allPosBitBoard[pieceTaken.getSide().ordinal()] ^=
@@ -197,21 +201,21 @@ bool Board::makeMove(long move) {
 		// pieceTaken.getBit();
 		// }
 
-		posBitBoard[pieceTaken.getPieceID()][pieceTaken.getSide()] ^= pieceTaken.getBit();
-		allPosBitBoard[pieceTaken.getSide()] ^= pieceTaken.getBit();
+		posBitBoard[pieceTaken->getPieceID()][pieceTaken->getSide()] ^= pieceTaken->getBit();
+		allPosBitBoard[pieceTaken->getSide()] ^= pieceTaken->getBit();
 
 		// remove ref to piecetaken on board
-		board[pieceTaken.getRow()][pieceTaken.getCol()] = 0;
+		board[pieceTaken->getRow()][pieceTaken->getCol()] = 0;
 
 		// remove old hash from piece that was taken, if any
-		hashCode ^= rngTable.getPiecePerSquareRandom(pieceTaken.getSide(), pieceTaken.getPieceID(), pieceTaken.getRow(), pieceTaken.getCol());
+		hashCode ^= rngTable->getPiecePerSquareRandom(pieceTaken->getSide(), pieceTaken->getPieceID(), pieceTaken->getRow(), pieceTaken->getCol());
 
 	}
 
 	if (note == CASTLE_NEAR || note == CASTLE_FAR) {
 
-		Piece king = kings[turn];
-		Piece rook;
+		Piece * king = kings[turn];
+		Piece * rook;
 
 		if (note == CASTLE_NEAR) {
 			rook = board[materialRow[turn]][rookStartCols[turn][1]];
@@ -241,80 +245,80 @@ bool Board::makeMove(long move) {
 
 	}
 
-	// if last move made is pawn leap, remove en passant file num
+// if last move made is pawn leap, remove en passant file num
 	if (getLastMoveMade() != 0) {
 		if (Move::getNote(getLastMoveMade()) == PAWN_LEAP) {
-			hashCode ^= rngTable.getEnPassantFile(Move::getToCol(getLastMoveMade()));
+			hashCode ^= rngTable->getEnPassantFile(Move::getToCol(getLastMoveMade()));
 		}
 	}
 
-	// if new move is pawn leap, add en passant file num
+// if new move is pawn leap, add en passant file num
 	if (note == PAWN_LEAP) {
-		hashCode ^= rngTable.getEnPassantFile(Move::getToCol(move));
+		hashCode ^= rngTable->getEnPassantFile(Move::getToCol(move));
 	}
 
-	// add new castle options
-	hashCode ^= rngTable.getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
+// add new castle options
+	hashCode ^= rngTable->getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
 			this->farRookHasMoved(WHITE), this->nearRookHasMoved(WHITE), this->kingHasMoved(WHITE));
 
-	// either remove black and add white or reverse. Same operation.
-	hashCode ^= rngTable.getBlackToMoveRandom();
+// either remove black and add white or reverse. Same operation.
+	hashCode ^= rngTable->getBlackToMoveRandom();
 
-	// show that this move is now the last move made
-	moveHistory.push_back(*(new Move(move)));
+// show that this move is now the last move made
+	moveHistory->push_back(new Move(move));
 
-	// move was made, next player's turn
+// move was made, next player's turn
 	turn = Side::otherSide(turn);
 
-	// verifyBitBoards();
+// verifyBitBoards();
 
 	return true;
 
 }
 
-void Board::movePiece(Piece pieceMoving, int toRow, int toCol, MoveNote note) {
+void Board::movePiece(Piece * pieceMoving, int toRow, int toCol, MoveNote note) {
 
-	long bitMove = BitBoard::getMask(pieceMoving.getRow(), pieceMoving.getCol()) ^ BitBoard::getMask(toRow, toCol);
+	long bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(toRow, toCol);
 
-	// remove bit position from where piece was and add where it is now
-	posBitBoard[pieceMoving.getPieceID()][pieceMoving.getSide()] ^= bitMove;
-	allPosBitBoard[pieceMoving.getSide()] ^= bitMove;
+// remove bit position from where piece was and add where it is now
+	posBitBoard[pieceMoving->getPieceID()][pieceMoving->getSide()] ^= bitMove;
+	allPosBitBoard[pieceMoving->getSide()] ^= bitMove;
 
-	// remove old hash from where piece was
-	hashCode ^= rngTable.getPiecePerSquareRandom(turn, pieceMoving.getPieceID(), pieceMoving.getRow(), pieceMoving.getCol());
+// remove old hash from where piece was
+	hashCode ^= rngTable->getPiecePerSquareRandom(turn, pieceMoving->getPieceID(), pieceMoving->getRow(), pieceMoving->getCol());
 
-	// remove pieces old position
-	board[pieceMoving.getRow()][pieceMoving.getCol()] = 0;
-	// update board to reflect piece's new position
+// remove pieces old position
+	board[pieceMoving->getRow()][pieceMoving->getCol()] = (Piece *) 0;
+// update board to reflect piece's new position
 	board[toRow][toCol] = pieceMoving;
 
-	// tell piece its new position
-	pieceMoving.setPos(toRow, toCol);
-	pieceMoving.setMoved(true);
+// tell piece its new position
+	pieceMoving->setPos(toRow, toCol);
+	pieceMoving->setMoved(true);
 
 	if (note == NEW_QUEEN) {
-		pieceMoving.setPieceID(QUEEN);
-		posBitBoard[PAWN][pieceMoving.getSide()] ^= pieceMoving.getBit();
-		posBitBoard[QUEEN][pieceMoving.getSide()] ^= pieceMoving.getBit();
+		pieceMoving->setPieceID(QUEEN);
+		posBitBoard[PAWN][pieceMoving->getSide()] ^= pieceMoving->getBit();
+		posBitBoard[QUEEN][pieceMoving->getSide()] ^= pieceMoving->getBit();
 	}
 
-	// if (pieceMoving == getKing(turn)) {
-	// setCastleRights(turn, 0);
-	// }
+// if (pieceMoving == getKing(turn)) {
+// setCastleRights(turn, 0);
+// }
 
-	// add hash of piece at new location
-	hashCode ^= rngTable.getPiecePerSquareRandom(turn, pieceMoving.getPieceID(), toRow, toCol);
+// add hash of piece at new location
+	hashCode ^= rngTable->getPiecePerSquareRandom(turn, pieceMoving->getPieceID(), toRow, toCol);
 }
 
 long Board::undoMove() {
 
-	// if no there is no last move then undoMove is impossible
-	if (moveHistory.empty()) {
+// if no there is no last move then undoMove is impossible
+	if (moveHistory->empty()) {
 		// System.out.println("Can not undo move");
 		return 0;
 	}
 
-	// retrieve last move made
+// retrieve last move made
 	long lastMove = getLastMoveMade();
 
 	int fromRow = Move::getFromRow(lastMove);
@@ -323,14 +327,14 @@ long Board::undoMove() {
 	int toCol = Move::getToCol(lastMove);
 	MoveNote note = Move::getNote(lastMove);
 
-	// last move made was made by previous player, which is also the next
-	// player
+// last move made was made by previous player, which is also the next
+// player
 	turn = Side::otherSide(turn);
 
 	if (note == CASTLE_NEAR || note == CASTLE_FAR) {
 
-		Piece king = kings[turn];
-		Piece rook;
+		Piece* king = kings[turn];
+		Piece* rook;
 
 		if (note == CASTLE_FAR) {
 			rook = board[materialRow[turn]][3];
@@ -362,67 +366,69 @@ long Board::undoMove() {
 	if (Move::hasPieceTaken(lastMove)) {
 
 		// add taken piece back to vectors and board
-		Piece pieceTaken = piecesTaken[Side::otherSide(turn)].pop_back()();
+		Piece* pieceTaken = piecesTaken[Side::otherSide(turn)]->back();
+		piecesTaken[Side::otherSide(turn)]->pop_back();
 
-		pieces[Side::otherSide(turn)].push_back(pieceTaken);
+		pieces[Side::otherSide(turn)]->push_back(pieceTaken);
 
 		// add piece taken to position bit board
-		posBitBoard[pieceTaken.getPieceID()][pieceTaken.getSide()] |= pieceTaken.getBit();
-		allPosBitBoard[pieceTaken.getSide()] |= pieceTaken.getBit();
+		posBitBoard[pieceTaken->getPieceID()][pieceTaken->getSide()] |= pieceTaken->getBit();
+		allPosBitBoard[pieceTaken->getSide()] |= pieceTaken->getBit();
 
-		board[pieceTaken.getRow()][pieceTaken.getCol()] = pieceTaken;
+		board[pieceTaken->getRow()][pieceTaken->getCol()] = pieceTaken;
 
 	}
 
-	// move was undone so show move made before that as the last move made
-	moveHistory.pop_back();
+// move was undone so show move made before that as the last move made
+	moveHistory->pop_back();
 
 	if (hashCodeHistory.empty()) {
 		// if no hashCode was saved then generate it the hard way
 		hashCode = generateHashCode();
 	} else {
 		// retrieve what the hashCode was before move was made
-		hashCode = hashCodeHistory.pop_back();
+		hashCode = hashCodeHistory.back();
+		hashCodeHistory.pop_back();
 	}
 
-	// verifyBitBoards();
+// verifyBitBoards();
 
 	return lastMove;
 
 }
 
-void Board::undoMovePiece(Piece pieceMoving, int fromRow, int fromCol, MoveNote note, bool hadMoved) {
+void Board::undoMovePiece(Piece* pieceMoving, int fromRow, int fromCol, MoveNote note, bool hadMoved) {
 
-	long bitMove = BitBoard::getMask(pieceMoving.getRow(), pieceMoving.getCol()) ^ BitBoard::getMask(fromRow, fromCol);
+	long bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(fromRow, fromCol);
 
-	// remove bit position from where piece was and add where it is now
-	posBitBoard[pieceMoving.getPieceID()][pieceMoving.getSide()] ^= bitMove;
-	allPosBitBoard[pieceMoving.getSide()] ^= bitMove;
+// remove bit position from where piece was and add where it is now
+	posBitBoard[pieceMoving->getPieceID()][pieceMoving->getSide()] ^= bitMove;
+	allPosBitBoard[pieceMoving->getSide()] ^= bitMove;
 
-	// remove old position
-	board[pieceMoving.getRow()][pieceMoving.getCol()] = 0;
-	// put piece in old position
+// remove old position
+	board[pieceMoving->getRow()][pieceMoving->getCol()] = 0;
+// put piece in old position
 	board[fromRow][fromCol] = pieceMoving;
 
-	// tell piece where it was
-	pieceMoving.setPos(fromRow, fromCol);
+// tell piece where it was
+	pieceMoving->setPos(fromRow, fromCol);
 
-	// show whether piece had moved before this move was made
-	pieceMoving.setMoved(hadMoved);
+// show whether piece had moved before this move was made
+	pieceMoving->setMoved(hadMoved);
 
 	if (note == NEW_QUEEN) {
-		pieceMoving.setPieceID(PAWN);
-		posBitBoard[PAWN][pieceMoving.getSide()] |= pieceMoving.getBit();
-		posBitBoard[QUEEN][pieceMoving.getSide()] ^= pieceMoving.getBit();
+		pieceMoving->setPieceID(PAWN);
+		posBitBoard[PAWN][pieceMoving->getSide()] |= pieceMoving->getBit();
+		posBitBoard[QUEEN][pieceMoving->getSide()] ^= pieceMoving->getBit();
 	}
 
 }
 
 void Board::verifyBitBoards() {
 
-	Piece piece;
+	Piece * piece;
 
-	long** allBitBoard = new long[6][2];
+	long allBitBoard[6][2];
 
 	for (int i = 0; i < 6; i++) {
 		allBitBoard[i][0] = posBitBoard[i][0];
@@ -434,7 +440,7 @@ void Board::verifyBitBoards() {
 			piece = board[r][c];
 
 			if (piece != 0) {
-				allBitBoard[piece.getPieceID()][piece.getSide()] ^= BitBoard::getMask(r, c);
+				allBitBoard[piece->getPieceID()][piece->getSide()] ^= BitBoard::getMask(r, c);
 			}
 
 		}
@@ -453,25 +459,26 @@ void Board::verifyBitBoards() {
 }
 
 bool Board::canUndo() {
-	return (moveHistory.size() != 0);
+	return (moveHistory->size() != 0);
 }
 
 vector<long> Board::generateValidMoves() {
-	return generateValidMoves(false, 0, { 0 });
+
+	return generateValidMoves(false, 0, (long*) 0);
 }
 
 vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMoves) {
 
-	// find in check details. i.e. left and right castle info
-	// makeNullMove();
+// find in check details. i.e. left and right castle info
+// makeNullMove();
 
-	// System.out.println("Not safe areas");
-	// BitBoard.printBitBoard(nullMoveInfo[0]);
-	//
-	// System.out.println("in check vector");
-	// BitBoard.printBitBoard(nullMoveInfo[1]);
+// System.out.println("Not safe areas");
+// BitBoard.printBitBoard(nullMoveInfo[0]);
+//
+// System.out.println("in check vector");
+// BitBoard.printBitBoard(nullMoveInfo[1]);
 
-	// ArrayList<Long> validMoves = new ArrayList<Long>(50);
+// ArrayList<Long> validMoves = new ArrayList<Long>(50);
 	validMoves.clear();
 
 	if (!hasSufficientMaterial() || drawByThreeRule()) {
@@ -482,14 +489,14 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 	int prevMovesSize = 0;
 
 	long move;
-	for (int p = 0; p < pieces[turn].size(); p++) {
+	for (int p = 0; p < (int) pieces[turn]->size(); p++) {
 
-		pieces[turn].at(p).generateValidMoves(this, nullMoveInfo, allPosBitBoard, validMoves);
+		pieces[turn]->at(p)->generateValidMoves(this, nullMoveInfo, allPosBitBoard, validMoves);
 
-		for (int m = prevMovesSize; m < validMoves.size(); m++) {
+		for (int m = prevMovesSize; m < (int) validMoves.size(); m++) {
 			move = validMoves.at(m);
 
-			move = Move::setHadMoved(move, pieces[turn].at(p).hasMoved());
+			move = Move::setHadMoved(move, pieces[turn]->at(p)->hasMoved());
 
 //			if (move == hashMove) {
 //				move = Move::setValue(move, 10000);
@@ -528,19 +535,19 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 }
 
 long* Board::makeNullMove() {
-	// long nullMoveAttacks = 0;
-	// long inCheckVector = BitBoard.ALL_ONES;
-	// long bitAttackCompliment = 0;
-	//
-	// nullMoveInfo[0] = nullMoveAttacks;
-	// nullMoveInfo[1] = inCheckVector;
-	// nullMoveInfo[2] = bitAttackCompliment;
+// long nullMoveAttacks = 0;
+// long inCheckVector = BitBoard.ALL_ONES;
+// long bitAttackCompliment = 0;
+//
+// nullMoveInfo[0] = nullMoveAttacks;
+// nullMoveInfo[1] = inCheckVector;
+// nullMoveInfo[2] = bitAttackCompliment;
 
-	// recalculating check info
+// recalculating check info
 	clearBoardStatus();
 
-	for (int p = 0; p < pieces[turn].size(); p++) {
-		pieces[turn].at(p).clearBlocking();
+	for (int p = 0; p < (int) pieces[turn]->size(); p++) {
+		pieces[turn]->at(p)->clearBlocking();
 	}
 
 	nullMoveInfo[0] = BitBoard::getPawnAttacks(posBitBoard[PAWN][Side::otherSide(turn)], Side::otherSide(turn));
@@ -561,18 +568,18 @@ long* Board::makeNullMove() {
 	long left = 0xFEFEFEFEFEFEFEFEL & updown;
 	long right = 0x7F7F7F7F7F7F7F7FL & updown;
 
-	for (int p = 0; p < pieces[Side::otherSide(turn)].size(); p++) {
+	for (int p = 0; p < (int) pieces[Side::otherSide(turn)]->size(); p++) {
 
-		pieces[Side::otherSide(turn)].at(p).getNullMoveInfo(this, nullMoveInfo, updown, left, right, posBitBoard[KING][turn],
+		pieces[Side::otherSide(turn)]->at(p)->getNullMoveInfo(this, nullMoveInfo, updown, left, right, posBitBoard[KING][turn],
 				King::getKingCheckVectors(posBitBoard[KING][turn], updown, left, right), allPosBitBoard[turn]);
 
 	}
 
-	// for (int i = 0; i < 3; i++) {
-	// System.out.println(BitBoard.printBitBoard(nullMoveInfo[i]));
-	// }
+// for (int i = 0; i < 3; i++) {
+// System.out.println(BitBoard.printBitBoard(nullMoveInfo[i]));
+// }
 
-	if ((kings[turn].getBit() & nullMoveInfo[0]) != 0) {
+	if ((kings[turn]->getBit() & nullMoveInfo[0]) != 0) {
 		setBoardStatus(CHECK);
 	}
 
@@ -587,7 +594,7 @@ PositionStatus Board::checkPiece(int row, int col, side_t player) {
 	}
 
 	if (board[row][col] != 0) {
-		if (board[row][col].getSide() == player)
+		if (board[row][col]->getSide() == player)
 			return FRIEND;
 		else
 			return ENEMY;
@@ -598,33 +605,33 @@ PositionStatus Board::checkPiece(int row, int col, side_t player) {
 }
 
 long Board::getLastMoveMade() {
-	if (!moveHistory.empty()) {
-		return moveHistory.back().getMoveLong();
+	if (!moveHistory->empty()) {
+		return moveHistory->back()->getMoveLong();
 	} else {
 		return 0;
 	}
 }
 
-vector<Move> Board::getMoveHistory() {
+vector<Move*>* Board::getMoveHistory() {
 	return moveHistory;
 }
 
 int Board::getPieceValue(int row, int col) {
-	return Values::getPieceValue(board[row][col].getPieceID()) + getOpeningPositionValue(board[row][col]);
+	return Values::getPieceValue(board[row][col]->getPieceID()) + getOpeningPositionValue(board[row][col]);
 }
 
-int Board::getOpeningPositionValue(Piece piece) {
+int Board::getOpeningPositionValue(Piece* piece) {
 
 	if (piece == 0) {
 		return 0;
 	}
 
 	int value;
-	side_t player = piece.getSide();
-	int row = piece.getRow();
-	int col = piece.getCol();
+	side_t player = piece->getSide();
+	int row = piece->getRow();
+	int col = piece->getCol();
 
-	switch (piece.getPieceID()) {
+	switch (piece->getPieceID()) {
 	case KNIGHT:
 		value = PositionBonus::getKnightPositionBonus(row, col, player);
 		break;
@@ -653,13 +660,13 @@ int Board::getOpeningPositionValue(Piece piece) {
 
 }
 
-int Board::getEndGamePositionValue(Piece piece) {
+int Board::getEndGamePositionValue(Piece* piece) {
 	int value;
-	side_t player = piece.getSide();
-	int row = piece.getRow();
-	int col = piece.getCol();
+	side_t player = piece->getSide();
+	int row = piece->getRow();
+	int col = piece->getCol();
 
-	switch (piece.getPieceID()) {
+	switch (piece->getPieceID()) {
 	case KNIGHT:
 		value = PositionBonus::getKnightPositionBonus(row, col, player);
 		break;
@@ -690,8 +697,8 @@ int Board::getEndGamePositionValue(Piece piece) {
 int Board::openingPositionScore(side_t side) {
 	int score = 0;
 
-	for (int i = 0; i < pieces[side].size(); i++) {
-		score += getOpeningPositionValue(pieces[side].at(i));
+	for (int i = 0; i < (int) pieces[side]->size(); i++) {
+		score += getOpeningPositionValue(pieces[side]->at(i));
 	}
 
 	return score;
@@ -700,8 +707,8 @@ int Board::openingPositionScore(side_t side) {
 int Board::endGamePositionScore(side_t side) {
 	int score = 0;
 
-	for (int i = 0; i < pieces[side].size(); i++) {
-		score += getEndGamePositionValue(pieces[side].at(i));
+	for (int i = 0; i < (int) pieces[side]->size(); i++) {
+		score += getEndGamePositionValue(pieces[side]->at(i));
 	}
 
 	return score;
@@ -710,8 +717,8 @@ int Board::endGamePositionScore(side_t side) {
 int Board::materialScore(side_t side) {
 	int score = 0;
 
-	for (int i = 0; i < pieces[side].size(); i++) {
-		score += Values::getPieceValue(pieces[side].at(i).getPieceID());
+	for (int i = 0; i < (int) pieces[side]->size(); i++) {
+		score += Values::getPieceValue(pieces[side]->at(i)->getPieceID());
 	}
 
 	return score;
@@ -771,8 +778,8 @@ int Board::calcGamePhase() {
 	int phase = Values::TOTALPHASE;
 
 	for (int i = 0; i < 2; i++) {
-		for (int p = 0; p < pieces[i].size(); p++) {
-			phase -= Values::PIECE_PHASE_VAL[pieces[i].at(p).getPieceID()];
+		for (int p = 0; p < (int) pieces[i]->size(); p++) {
+			phase -= Values::PIECE_PHASE_VAL[pieces[i]->at(p)->getPieceID()];
 		}
 	}
 
@@ -803,25 +810,25 @@ int Board::staticScore() {
 	return ptDiff;
 }
 
-Piece Board::getPiece(int row, int col) {
+Piece* Board::getPiece(int row, int col) {
 	return board[row][col];
 }
 
 PieceID Board::getPieceID(int row, int col) {
 	if (board[row][col] != 0) {
-		return board[row][col].getPieceID();
+		return board[row][col]->getPieceID();
 	} else {
-		return 0;
+		return (PieceID) -1;
 	}
 
 }
 
 side_t Board::getPieceSide(int row, int col) {
 	if (board[row][col] != 0) {
-		return board[row][col].getSide();
+		return board[row][col]->getSide();
 	} else {
 		printf("Error: requested player on null piece");
-		return 0;
+		return (side_t) -1;
 	}
 
 }
@@ -844,110 +851,112 @@ bool Board::hasPiece(int row, int col) {
 
 bool Board::hasMoved(int row, int col) {
 	if (hasPiece(row, col)) {
-		return board[row][col].hasMoved();
+		return board[row][col]->hasMoved();
 	} else {
 		return true;
 	}
 }
 
-vector<Piece> Board::getPiecesTakenFor(side_t player) {
+vector<Piece*>* Board::getPiecesTakenFor(side_t player) {
 	return piecesTaken[player];
 }
 
 void Board::initializeCastleSetup() {
 
-	int** rookCols = { { -1, -1 }, { -1, -1 } };
-	this->rookStartCols = rookCols;
+	this->rookStartCols[0][0] = -1;
+	this->rookStartCols[0][1] = -1;
+	this->rookStartCols[1][0] = -1;
+	this->rookStartCols[1][1] = -1;
 
 	for (int s = 0; s < 2; s++) {
-		for (int c = kings[s].getCol() - 1; c >= 0; c--) {
+		for (int c = kings[s]->getCol() - 1; c >= 0; c--) {
 
 			if (board[materialRow[s]][c] != 0) {
-				if (board[materialRow[s]][c].getPieceID() == ROOK) {
-					rookCols[s][0] = c;
+				if (board[materialRow[s]][c]->getPieceID() == ROOK) {
+					this->rookStartCols[s][0] = c;
 					break;
 				}
 			}
 		}
 
-		for (int c = kings[s].getCol() + 1; c < 8; c++) {
+		for (int c = kings[s]->getCol() + 1; c < 8; c++) {
 			if (board[materialRow[s]][c] != 0) {
-				if (board[materialRow[s]][c].getPieceID() == ROOK) {
-					rookCols[s][1] = c;
+				if (board[materialRow[s]][c]->getPieceID() == ROOK) {
+					this->rookStartCols[s][1] = c;
 					break;
 				}
 			}
 		}
 	}
 
-	kingCols[BLACK] = kings[BLACK].getCol();
-	kingCols[WHITE] = kings[WHITE].getCol();
+	kingCols[BLACK] = kings[BLACK]->getCol();
+	kingCols[WHITE] = kings[WHITE]->getCol();
 
 }
 
-bool Board::placePiece(Piece piece, int toRow, int toCol) {
+bool Board::placePiece(Piece* piece, int toRow, int toCol) {
 
 	if (toRow >= 0 && toRow < 8 && toCol >= 0 && toCol < 8) {
 		if (board[toRow][toCol] != 0) {
-			if (board[toRow][toCol].getPieceID() == KING) {
+			if (board[toRow][toCol]->getPieceID() == KING) {
 				return false;
 			}
 		}
 	}
 
-	if (piece.getPieceID() == KING) {
+	if (piece->getPieceID() == KING) {
 		if (toRow < 0 || toCol < 0) {
 			return false;
 		} else {
-			kings[piece.getSide()] = piece;
+			kings[piece->getSide()] = piece;
 		}
 	}
 
-	piece.setMoved(false);
+	piece->setMoved(false);
 
-	if (piece.getRow() >= 0) {
+	if (piece->getRow() >= 0) {
 		// remove where piece was if it was on board
-		posBitBoard[piece.getPieceID()][piece.getSide()] ^= piece.getBit();
-		allPosBitBoard[piece.getSide()] ^= piece.getBit();
-		board[piece.getRow()][piece.getCol()] = 0;
+		posBitBoard[piece->getPieceID()][piece->getSide()] ^= piece->getBit();
+		allPosBitBoard[piece->getSide()] ^= piece->getBit();
+		board[piece->getRow()][piece->getCol()] = 0;
 
 	} else {
 
-		pieces[piece.getSide()].push_back(piece);
+		pieces[piece->getSide()]->push_back(piece);
 	}
 
 	if (toRow >= 0) {
 		// remove where piece taken was
 		if (board[toRow][toCol] != 0) {
 
-			Piece pieceTaken = board[toRow][toCol];
+			Piece* pieceTaken = board[toRow][toCol];
 
 			// remove bit position of piece taken
-			posBitBoard[pieceTaken.getPieceID()][pieceTaken.getSide()] ^= pieceTaken.getBit();
-			allPosBitBoard[pieceTaken.getSide()] ^= pieceTaken.getBit();
+			posBitBoard[pieceTaken->getPieceID()][pieceTaken->getSide()] ^= pieceTaken->getBit();
+			allPosBitBoard[pieceTaken->getSide()] ^= pieceTaken->getBit();
 
 			// remove ref to piece taken
-			pieces[pieceTaken.getSide()].erase(find(pieces[pieceTaken.getSide()].begin(), pieces[pieceTaken.getSide()].end(), pieceTaken));
+			pieces[pieceTaken->getSide()]->erase(find(pieces[pieceTaken->getSide()]->begin(), pieces[pieceTaken->getSide()]->end(), pieceTaken));
 		}
 
 		// tell piece where it is now
-		piece.setPos(toRow, toCol);
+		piece->setPos(toRow, toCol);
 
 		// reflect new piece in position bitboard
-		posBitBoard[piece.getPieceID()][piece.getSide()] |= piece.getBit();
-		allPosBitBoard[piece.getSide()] |= piece.getBit();
+		posBitBoard[piece->getPieceID()][piece->getSide()] |= piece->getBit();
+		allPosBitBoard[piece->getSide()] |= piece->getBit();
 
 		// update board ref to show piece there
 		board[toRow][toCol] = piece;
 	} else {
 		// piece is being taken off the board. Remove
-		if (piece.getPieceID() != KING) {
-			pieces[piece.getSide()].erase(find(pieces[piece.getSide()].begin(), pieces[piece.getSide()].end(), piece));
+		if (piece->getPieceID() != KING) {
+			pieces[piece->getSide()]->erase(find(pieces[piece->getSide()]->begin(), pieces[piece->getSide()]->end(), piece));
 		}
 	}
 
-	// basically start over with new board
-	this->moveHistory.clear();
+// basically start over with new board
+	this->moveHistory->clear();
 	this->hashCodeHistory.clear();
 
 	this->hashCode = generateHashCode();
@@ -1017,15 +1026,15 @@ int Board::getKingStartingCol(side_t side) {
 }
 
 bool Board::kingHasMoved(side_t player) {
-	return kings[player].hasMoved();
+	return kings[player]->hasMoved();
 }
 
 long Board::farCastleMask(side_t player) {
-	return BitBoard::getCastleMask(Math::min(rookStartCols[player][0], 2), kings[player].getCol(), player);
+	return BitBoard::getCastleMask(Math::min(rookStartCols[player][0], 2), kings[player]->getCol(), player);
 }
 
 long Board::nearCastleMask(side_t player) {
-	return BitBoard::getCastleMask(kings[player].getCol(), Math::max(rookStartCols[player][1], 6), player);
+	return BitBoard::getCastleMask(kings[player]->getCol(), Math::max(rookStartCols[player][1], 6), player);
 }
 
 Board * Board::getCopy() {
@@ -1112,25 +1121,25 @@ long Board::generateHashCode() {
 	long hashCode = 0;
 
 	if (turn == BLACK) {
-		hashCode = rngTable.getBlackToMoveRandom();
+		hashCode = rngTable->getBlackToMoveRandom();
 	}
 
-	Piece p;
+	Piece* p;
 	for (int r = 0; r < 8; r++) {
 		for (int c = 0; c < 8; c++) {
 			p = board[r][c];
 			if (p != 0) {
-				hashCode ^= rngTable.getPiecePerSquareRandom(p.getSide(), p.getPieceID(), r, c);
+				hashCode ^= rngTable->getPiecePerSquareRandom(p->getSide(), p->getPieceID(), r, c);
 			}
 		}
 	}
 
-	hashCode ^= rngTable.getCastlingRightsRandom(this->farRookHasMoved(BLACK), this->nearRookHasMoved(BLACK), this->kingHasMoved(BLACK),
-			this->farRookHasMoved(WHITE), this->nearRookHasMoved(WHITE), this->kingHasMoved(WHITE));
+	hashCode ^= rngTable->getCastlingRightsRandom(farRookHasMoved(BLACK), nearRookHasMoved(BLACK), kingHasMoved(BLACK), farRookHasMoved(WHITE),
+			nearRookHasMoved(WHITE), kingHasMoved(WHITE));
 
 	if (getLastMoveMade() != 0) {
 		if (Move::getNote(getLastMoveMade()) == PAWN_LEAP) {
-			hashCode ^= rngTable.getEnPassantFile(Move::getToCol(getLastMoveMade()));
+			hashCode ^= rngTable->getEnPassantFile(Move::getToCol(getLastMoveMade()));
 		}
 	}
 
@@ -1174,7 +1183,7 @@ bool Board::drawByThreeRule() {
 			return true;
 		}
 
-		if (moveHistory.at(i).hasPieceTaken()) {
+		if (moveHistory->at(i)->hasPieceTaken()) {
 			return false;
 		}
 
@@ -1188,13 +1197,13 @@ bool Board::hasSufficientMaterial() {
 
 	bool sufficient = true;
 
-	if (pieces[0].size() <= 2 && pieces[1].size() <= 2) {
+	if (pieces[0]->size() <= 2 && pieces[1]->size() <= 2) {
 
 		sufficient = false;
 
 		for (int i = 0; i < 2; i++) {
-			for (int p = 0; p < pieces[i].size(); p++) {
-				if ((pieces[i].at(p).getPieceID() == PAWN) || (pieces[i].at(p).getPieceID() == QUEEN) || (pieces[i].at(p).getPieceID() == ROOK)) {
+			for (int p = 0; p < (int) pieces[i]->size(); p++) {
+				if ((pieces[i]->at(p)->getPieceID() == PAWN) || (pieces[i]->at(p)->getPieceID() == QUEEN) || (pieces[i]->at(p)->getPieceID() == ROOK)) {
 					sufficient = true;
 				}
 			}
@@ -1211,13 +1220,13 @@ void Board::loadPiecesTaken() {
 
 		piecesTaken[i] = getFullPieceSet((side_t) i);
 
-		Piece piecePresent;
-		for (int p = 0; p < pieces[i].size(); p++) {
-			piecePresent = pieces[i].at(p);
+		Piece* piecePresent;
+		for (int p = 0; p < (int) pieces[i]->size(); p++) {
+			piecePresent = pieces[i]->at(p);
 
-			for (int t = 0; t < piecesTaken[i].size(); t++) {
-				if (piecesTaken[i].at(t).getPieceID() == piecePresent.getPieceID()) {
-					piecesTaken[i].erase(piecesTaken[i].begin() + t);
+			for (int t = 0; t < (int) piecesTaken[i]->size(); t++) {
+				if (piecesTaken[i]->at(t)->getPieceID() == piecePresent->getPieceID()) {
+					piecesTaken[i]->erase(piecesTaken[i]->begin() + t);
 					break;
 				}
 			}
@@ -1226,27 +1235,27 @@ void Board::loadPiecesTaken() {
 
 }
 
-static vector<Piece> * Board::getFullPieceSet(side_t player) {
-	vector<Piece> pieces = new vector<Piece>();
+vector<Piece*> * Board::getFullPieceSet(side_t player) {
+	vector<Piece*> * pieces = new vector<Piece*>();
 
 	for (int i = 0; i < 8; i++) {
-		pieces.push_back(*(new Piece(PAWN, player, 0, 0, false)));
+		pieces->push_back(new Piece(PAWN, player, 0, 0, false));
 	}
 
 	for (int i = 0; i < 2; i++) {
-		pieces.push_back(*(new Piece(BISHOP, player, 0, 0, false)));
+		pieces->push_back(new Piece(BISHOP, player, 0, 0, false));
 	}
 
 	for (int i = 0; i < 2; i++) {
-		pieces.push_back(*(new Piece(ROOK, player, 0, 0, false)));
+		pieces->push_back(new Piece(ROOK, player, 0, 0, false));
 	}
 
 	for (int i = 0; i < 2; i++) {
-		pieces.push_back(*(new Piece(KNIGHT, player, 0, 0, false)));
+		pieces->push_back(new Piece(KNIGHT, player, 0, 0, false));
 	}
 
-	pieces.push_back(*(new Piece(KING, player, 0, 0, false)));
-	pieces.push_back(*(new Piece(QUEEN, player, 0, 0, false)));
+	pieces->push_back(new Piece(KING, player, 0, 0, false));
+	pieces->push_back(new Piece(QUEEN, player, 0, 0, false));
 
 	return pieces;
 }

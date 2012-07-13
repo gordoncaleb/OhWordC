@@ -8,7 +8,7 @@ CFLAGS = -c $(INCLUDES)
 all : OhWordC
 	
 OhWordC : OhWordC.o Side.o Math.o Piece.o Move.o PositionBonus.o SecureRandom.o Values.o RNGTable.o BitBoard.o BoardMaker.o  Bishop.o Rook.o Knight.o Queen.o King.o Pawn.o Board.o
-	$(CC) OhWordC.o Math.o -o OhWordC
+	$(CC)  -o OhWordC OhWordC.o
 OhWordC.o : OhWordC.cpp
 	$(CC) $(CFLAGS) OhWordC.cpp
 Math.o : Math.cpp

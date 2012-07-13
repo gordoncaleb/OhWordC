@@ -25,9 +25,9 @@ Board* BoardMaker::getRandomChess960Board() {
 }
 
 Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
-	vector<Piece>* pieces[2];
-	pieces[0] = new vector<Piece>();
-	pieces[1] = new vector<Piece>();
+	vector<Piece*> * pieces[2];
+	pieces[0] = new vector<Piece*>();
+	pieces[1] = new vector<Piece*>();
 
 	int* pawnRow = new int[2];
 	pawnRow[BLACK] = 1;
@@ -39,10 +39,10 @@ Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
 
 	// public Piece(PieceID id, Side player, int row, int col, boolean
 	// moved) {
-	Piece temp;
+	Piece * temp;
 	for (int s = 0; s < 2; s++) {
 		for (int p = 0; p < 8; p++) {
-			temp = *(new Piece(PAWN, (side_t) s, pawnRow[s], p, false));
+			temp = new Piece(PAWN, (side_t) s, pawnRow[s], p, false);
 			pieces[s]->push_back(temp);
 		}
 	}
@@ -64,12 +64,12 @@ Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
 
 	for (int s = 0; s < 2; s++) {
 		for (int p = 0; p < 8; p++) {
-			temp = *(new Piece(setup[p], (side_t) s, mainRow[s], p, false));
+			temp = new Piece(setup[p], (side_t) s, mainRow[s], p, false);
 			pieces[s]->push_back(temp);
 		}
 	}
 
-	Board * board = new Board(pieces, (side_t) WHITE, new vector<Move>(), (int **) 0, (int*) 0);
+	Board * board = new Board(pieces, (side_t) WHITE, new vector<Move*>(), (int (*)[2]) 0, (int *) 0);
 
 	return board;
 }
