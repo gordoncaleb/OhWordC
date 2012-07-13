@@ -10,31 +10,31 @@
 
 namespace OhWordC {
 class RNGTable {
+
+private:
 	static int seed [8];
-	static RNGTable * singleton;
+	static RNGTable* singleton;
 	SecureRandom * rng;
-	long piecePerSquare [2][6][8][8];
-	long blackToMove;
-	long castlingRights [2][2][2][2];
-	long enPassantFile [8];
+	__int64 piecePerSquare [2][6][8][8];
+	__int64 blackToMove;
+	__int64 castlingRights [2][2][2][2];
+	__int64 enPassantFile [8];
 
 
 public:
 	RNGTable();
 	static RNGTable * getSingleton();
-	long randomLong();
+	__int64 randomLong();
 	void generatePiecePerSquare();
-	long getPiecePerSquareRandom(side_t player, PieceID id, int row, int col);
+	__int64 getPiecePerSquareRandom(side_t player, PieceID id, int row, int col);
 	void generateBlackToMove();
-	long getBlackToMoveRandom();
+	__int64 getBlackToMoveRandom();
 	void generateCastlingRights();
-	long getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bool blackKing, bool whiteFarRook, bool whiteNearRook, bool whiteKing);
+	__int64 getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bool blackKing, bool whiteFarRook, bool whiteNearRook, bool whiteKing);
 	void generateEnPassantFile();
-	long getEnPassantFile(int file);
+	__int64 getEnPassantFile(int file);
 	virtual ~RNGTable();
 };
-
-int RNGTable::seed [8] =  {-52, 45, -101, 26, -51, -99, -84, -79};
 
 }
 #endif /* RNGTABLE_H_ */

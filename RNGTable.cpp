@@ -7,6 +7,10 @@
 
 #include "stdafx.h"
 namespace OhWordC {
+
+int RNGTable::seed [8] =  {-52, 45, -101, 26, -51, -99, -84, -79};
+RNGTable * RNGTable::singleton = NULL;
+
 RNGTable::RNGTable() {
 	rng = new SecureRandom(seed);
 	generatePiecePerSquare();
@@ -15,21 +19,23 @@ RNGTable::RNGTable() {
 	generateEnPassantFile();
 }
 
-RNGTable* RNGTable::getSingleton() {
-	if (singleton == 0) {
+RNGTable * RNGTable::getSingleton() {
+	
+	if(!singleton){
 		singleton = new RNGTable();
 	}
+
 	return singleton;
 }
 
-long RNGTable::randomLong() {
+__int64 RNGTable::randomLong() {
 	return rng->nextLong();
 }
 
 void RNGTable::generatePiecePerSquare() {
 	int numPieceType = 6;
 
-	//piecePerSquare = new long[2][numPieceType][8][8];
+	//piecePerSquare = new __int64[2][numPieceType][8][8];
 
 	for (int player = 0; player < 2; player++) {
 		for (int pieceType = 0; pieceType < numPieceType; pieceType++) {
@@ -42,7 +48,7 @@ void RNGTable::generatePiecePerSquare() {
 	}
 }
 
-long RNGTable::getPiecePerSquareRandom(side_t player, PieceID id, int row, int col) {
+__int64 RNGTable::getPiecePerSquareRandom(side_t player, PieceID id, int row, int col) {
 	return piecePerSquare[player][id][row][col];
 }
 
@@ -51,12 +57,12 @@ void RNGTable::generateBlackToMove() {
 
 }
 
-long RNGTable::getBlackToMoveRandom() {
+__int64 RNGTable::getBlackToMoveRandom() {
 	return blackToMove;
 }
 
 void RNGTable::generateCastlingRights() {
-	//castlingRights = new long[2][2][2][2];
+	//castlingRights = new __int64[2][2][2][2];
 
 	for (int br = 0; br < 2; br++) {
 		for (int bl = 0; bl < 2; bl++) {
@@ -69,7 +75,7 @@ void RNGTable::generateCastlingRights() {
 	}
 }
 
-long RNGTable::getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bool blackKing, bool whiteFarRook, bool whiteNearRook,
+__int64 RNGTable::getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bool blackKing, bool whiteFarRook, bool whiteNearRook,
 		bool whiteKing) {
 
 	int blackLeft = 0;
@@ -99,13 +105,13 @@ long RNGTable::getCastlingRightsRandom(bool blackFarRook, bool blackNearRook, bo
 }
 
 void RNGTable::generateEnPassantFile() {
-	//enPassantFile = new long[8];
+	//enPassantFile = new __int64[8];
 	for (int f = 0; f < 8; f++) {
 		enPassantFile[f] = randomLong();
 	}
 }
 
-long RNGTable::getEnPassantFile(int file) {
+__int64 RNGTable::getEnPassantFile(int file) {
 	return enPassantFile[file];
 }
 

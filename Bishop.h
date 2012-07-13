@@ -20,15 +20,13 @@ public:
 	static PieceID getPieceID();
 	static string getName();
 	static string getStringID();
-	static void generateMoves(Piece* p, Board* board, vector<long> moves);
-	static vector<long> generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
-	static void getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
-			long friendly);
-	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
+	static void generateMoves(Piece* p, Board* board, vector<__int64> moves);
+	static vector<__int64> generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves);
+	static void getNullMoveInfo(Piece* piece, Board* board, __int64* nullMoveInfo, __int64 updown, __int64 left, __int64 right, __int64 kingBitBoard, __int64 kingCheckVectors,
+			__int64 friendly);
+	static void getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo);
 	virtual ~Bishop();
 };
-
-int Bishop::BISHOPMOVES [2][4] = { { 1, 1, -1, -1 }, { 1, -1, 1, -1 } };
 
 }
 

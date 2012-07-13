@@ -19,7 +19,7 @@ class Board {
 
 	Piece * board[8][8];
 	GameStatus boardStatus;
-	vector<long> validMoves;
+	vector<__int64> validMoves;
 	vector<Piece*> * pieces [2];
 	vector<Piece*> * piecesTaken [2];
 	int castleRights [2];
@@ -32,29 +32,29 @@ class Board {
 	side_t turn;
 	RNGTable * rngTable;
 	vector<Move*> * moveHistory;
-	long hashCode;
-	vector<long> hashCodeHistory;
-	long nullMoveInfo [3];
+	__int64 hashCode;
+	vector<__int64> hashCodeHistory;
+	__int64 nullMoveInfo [3];
 
-	long posBitBoard [6][2];
-	long allPosBitBoard [2];
+	__int64 posBitBoard [6][2];
+	__int64 allPosBitBoard [2];
 
 public:
 
 	Board();
 	Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory, int rookStartCols[2][2], int kingCols[2]);
 
-	bool makeMove(long move);
+	bool makeMove(__int64 move);
 	void movePiece(Piece * pieceMoving, int toRow, int toCol, MoveNote note);
-	long undoMove();
+	__int64 undoMove();
 	void undoMovePiece(Piece * pieceMoving, int fromRow, int fromCol, MoveNote note, bool hadMoved);
 	void verifyBitBoards();
 	bool canUndo();
-	vector<long> generateValidMoves();
-	vector<long> generateValidMoves(bool sort, long hashMove, long killerMoves[]);
-	long* makeNullMove();
+	vector<__int64> generateValidMoves();
+	vector<__int64> generateValidMoves(bool sort, __int64 hashMove, __int64 killerMoves[]);
+	__int64* makeNullMove();
 	PositionStatus checkPiece(int row, int col, side_t player);
-	long getLastMoveMade();
+	__int64 getLastMoveMade();
 	vector<Move*> * getMoveHistory();
 	int getPieceValue(int row, int col);
 	int getOpeningPositionValue(Piece* piece);
@@ -91,19 +91,19 @@ public:
 	int getRookStartingCol(side_t side, int near);
 	int getKingStartingCol(side_t side);
 	bool kingHasMoved(side_t player);
-	long farCastleMask(side_t player);
-	long nearCastleMask(side_t player);
+	__int64 farCastleMask(side_t player);
+	__int64 nearCastleMask(side_t player);
 	Board * getCopy();
 	string toString();
 	string toXML(bool includeHistory);
-	long generateHashCode();
+	__int64 generateHashCode();
 	int getHashIndex();
-	long getHashCode();
-	static long getHashCode(string xmlBoard);
+	__int64 getHashCode();
+	static __int64 getHashCode(string xmlBoard);
 	bool drawByThreeRule();
 	bool hasSufficientMaterial();
 	void loadPiecesTaken();
-	long resolveAlgebraicNotation(string notation);
+	__int64 resolveAlgebraicNotation(string notation);
 	static vector<Piece*> * getFullPieceSet(side_t player);
 };
 

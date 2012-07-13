@@ -13,7 +13,7 @@ SecureRandom::SecureRandom(int*) {
 	// TODO Auto-generated constructor stub
 
 }
-long SecureRandom::nextLong() {
+__int64 SecureRandom::nextLong() {
 	return 0;
 }
 SecureRandom::~SecureRandom() {

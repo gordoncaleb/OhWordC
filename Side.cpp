@@ -13,7 +13,7 @@ Side::Side() {
 }
 
 side_t Side::otherSide(side_t side) {
-	return (side_t)(side ^ 3);
+	return (side_t)(side ^ 1);
 }
 
 Side::~Side() {

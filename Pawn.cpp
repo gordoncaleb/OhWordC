@@ -24,7 +24,7 @@ string Pawn::getStringID() {
 	return "P";
 }
 
-vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -32,7 +32,7 @@ vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo
 	int fifthRank;
 	int value;
 	int myValue = board->getPieceValue(p->getRow(), p->getCol());
-	long moveLong;
+	__int64 moveLong;
 
 //		System.out.println("pawn " + p.getCol() + " null move info");
 //		System.out.println(BitBoard.printBitBoard(nullMoveInfo[0]));
@@ -148,7 +148,7 @@ vector<long> Pawn::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo
 
 }
 
-void Pawn::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void Pawn::getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();

@@ -25,10 +25,10 @@ class Move {
 	static int notNoteMask;
 	static int notPieceTaken;
 
-	long move;
+	__int64 move;
 
 public:
-	Move(long moveInt);
+	Move(__int64 moveInt);
 	Move(int fromRow, int fromCol, int toRow, int toCol);
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value);
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note);
@@ -36,62 +36,53 @@ public:
 	Move(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece pieceTaken, bool hadMoved);
 	void setMoveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken, bool hadMoved);
 
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken);
-	static long moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken, bool hadMoved);
+	static __int64 moveLong(int fromRow, int fromCol, int toRow, int toCol);
+	static __int64 moveLong(int fromRow, int fromCol, int toRow, int toCol, int value);
+	static __int64 moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note);
+	static __int64 moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken);
+	static __int64 moveLong(int fromRow, int fromCol, int toRow, int toCol, int value, MoveNote note, Piece* pieceTaken, bool hadMoved);
 
 	bool equals(Move move);
-	static bool equals(long moveLongA, long moveLongB);
-	static bool fromEquals(long moveLongA, long moveLongB);
-	static bool toEquals(long moveLongA, long moveLongB);
-	long setNote(MoveNote note);
-	static long setNote(long moveLong, MoveNote note);
+	static bool equals(__int64 moveLongA, __int64 moveLongB);
+	static bool fromEquals(__int64 moveLongA, __int64 moveLongB);
+	static bool toEquals(__int64 moveLongA, __int64 moveLongB);
+	__int64 setNote(MoveNote note);
+	static __int64 setNote(__int64 moveLong, MoveNote note);
 	MoveNote getNote();
-	static MoveNote getNote(long moveLong);
+	static MoveNote getNote(__int64 moveLong);
 	int getFromRow();
-	static int getFromRow(long moveLong);
+	static int getFromRow(__int64 moveLong);
 	int getFromCol();
-	static int getFromCol(long moveLong);
+	static int getFromCol(__int64 moveLong);
 	int getToRow();
-	static int getToRow(long moveLong);
+	static int getToRow(__int64 moveLong);
 	int getToCol();
-	static int getToCol(long moveLong);
+	static int getToCol(__int64 moveLong);
 	int getValue();
-	static int getValue(long moveLong);
-	long setValue(int value);
-	static long setValue(long moveLong, int value);
-	long setPieceTaken(Piece* pieceTaken);
-	static long setPieceTaken(long moveLong, Piece* pieceTaken);
+	static int getValue(__int64 moveLong);
+	__int64 setValue(int value);
+	static __int64 setValue(__int64 moveLong, int value);
+	__int64 setPieceTaken(Piece* pieceTaken);
+	static __int64 setPieceTaken(__int64 moveLong, Piece* pieceTaken);
 	bool hadMoved();
-	static bool hadMoved(long moveLong);
-	long setHadMoved(bool hadMoved);
-	static long setHadMoved(long moveLong, bool hadMoved);
+	static bool hadMoved(__int64 moveLong);
+	__int64 setHadMoved(bool hadMoved);
+	static __int64 setHadMoved(__int64 moveLong, bool hadMoved);
 	bool hasPieceTaken();
-	static bool hasPieceTaken(long moveLong);
+	static bool hasPieceTaken(__int64 moveLong);
 	bool getPieceTakenHasMoved();
-	static bool getPieceTakenHasMoved(long moveLong);
+	static bool getPieceTakenHasMoved(__int64 moveLong);
 	int getPieceTakenRow();
-	static int getPieceTakenRow(long moveLong);
+	static int getPieceTakenRow(__int64 moveLong);
 	int getPieceTakenCol();
-	static int getPieceTakenCol(long moveLong);
+	static int getPieceTakenCol(__int64 moveLong);
 	PieceID getPieceTakenID();
-	static PieceID getPieceTakenID(long moveLong);
+	static PieceID getPieceTakenID(__int64 moveLong);
 	Move * getCopy();
-	long getMoveLong();
+	__int64 getMoveLong();
 
 	virtual ~Move();
 };
-
-int Move::hadMovedMask = 1 << 15;
-int Move::hasPieceTakenMask = 1 << 16;
-int Move::pieceTakenHasMoved = 1 << 26;
-int Move::fromToMask = 0xFFF;
-int Move::fromMask = 0xFC0;
-int Move::toMask = 0x3F;
-int Move::notNoteMask = ~(0x7000);
-int Move::notPieceTaken = ~(0x7FF << 16);
 
 }
 #endif /* MOVE_H_ */

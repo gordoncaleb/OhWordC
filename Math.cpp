@@ -13,7 +13,7 @@ Math::Math() {
 
 }
 
-double pow(double base, double power) {
+double Math::pow(double base, double power) {
 	double out = 1;
 	while (power > 0) {
 		out *= base;
@@ -22,15 +22,15 @@ double pow(double base, double power) {
 	return out;
 }
 
-int max(int a, int b) {
+int Math::max(int a, int b) {
 	return (a >= b) ? a : b;
 }
 
-int min(int a, int b) {
+int Math::min(int a, int b) {
 	return (a < b) ? a : b;
 }
 
-double random() {
+double Math::random() {
 	return ((double) rand() / (double) RAND_MAX);
 }
 

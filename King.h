@@ -19,17 +19,16 @@ public:
 	static PieceID getPieceID();
 	static string getName();
 	static string getStringID();
-	static void generateMoves(Piece* p, Board* board, vector<long> moves);
-	static vector<long> generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
-	static void getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo);
-	static long getKingCheckVectors(long king, long updown, long left, long right);
-	static bool isValidMove(int toRow, int toCol, long* nullMoveInfo);
-	static bool canCastleFar(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard);
-	static bool canCastleNear(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard);
+	static void generateMoves(Piece* p, Board* board, vector<__int64> moves);
+	static vector<__int64> generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves);
+	static void getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo);
+	static __int64 getKingCheckVectors(__int64 king, __int64 updown, __int64 left, __int64 right);
+	static bool isValidMove(int toRow, int toCol, __int64* nullMoveInfo);
+	static bool canCastleFar(Piece* king, Board* board, side_t player, __int64* nullMoveInfo, __int64 allPosBitBoard);
+	static bool canCastleNear(Piece* king, Board* board, side_t player, __int64* nullMoveInfo, __int64 allPosBitBoard);
 	virtual ~King();
 };
 
- int King::KINGMOVES[2][8] = { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
 }
 
 #endif /* KING_H_ */

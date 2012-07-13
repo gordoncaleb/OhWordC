@@ -29,13 +29,15 @@ Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
 	pieces[0] = new vector<Piece*>();
 	pieces[1] = new vector<Piece*>();
 
-	int* pawnRow = new int[2];
+	int pawnRow[2];
 	pawnRow[BLACK] = 1;
 	pawnRow[WHITE] = 6;
 
-	int* mainRow = new int[2];
+	int mainRow[2];
 	mainRow[BLACK] = 0;
 	mainRow[WHITE] = 7;
+
+	printf("1");
 
 	// public Piece(PieceID id, Side player, int row, int col, boolean
 	// moved) {
@@ -47,37 +49,49 @@ Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
 		}
 	}
 
-	PieceID* setup = new PieceID[8];
+	printf("2");
 
-	setup[r1 * 2] = BISHOP;
-	setup[r2 * 2 + 1] = BISHOP;
+	PieceID * setup[8] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
-	setup[ithEmptyPosition(r3 + 1, setup)] = QUEEN;
+	*setup[r1 * 2] = BISHOP;
+	*setup[r2 * 2 + 1] = BISHOP;
 
-	setup[ithEmptyPosition(r4 + 1, setup)] = KNIGHT;
-	setup[ithEmptyPosition(r5 + 1, setup)] = KNIGHT;
+	printf("2.5");
+	*setup[ithEmptyPosition(r3 + 1, setup)] = QUEEN;
 
-	setup[ithEmptyPosition(2, setup)] = KING;
+	*setup[ithEmptyPosition(r4 + 1, setup)] = KNIGHT;
+	*setup[ithEmptyPosition(r5 + 1, setup)] = KNIGHT;
 
-	setup[ithEmptyPosition(1, setup)] = ROOK;
-	setup[ithEmptyPosition(1, setup)] = ROOK;
+	printf("2.75");
+	*setup[ithEmptyPosition(2, setup)] = KING;
 
+	*setup[ithEmptyPosition(1, setup)] = ROOK;
+	*setup[ithEmptyPosition(1, setup)] = ROOK;
+
+
+	printf("3");
 	for (int s = 0; s < 2; s++) {
 		for (int p = 0; p < 8; p++) {
-			temp = new Piece(setup[p], (side_t) s, mainRow[s], p, false);
+			printf("putting piece (%d) at (%d,%d)\n",setup[p],mainRow[s],p);
+
+			temp = new Piece(*setup[p], (side_t) s, mainRow[s], p, false);
 			pieces[s]->push_back(temp);
 		}
 	}
 
+	printf("4");
+
 	Board * board = new Board(pieces, (side_t) WHITE, new vector<Move*>(), (int (*)[2]) 0, (int *) 0);
+
+	printf("5");
 
 	return board;
 }
 
-int BoardMaker::ithEmptyPosition(int i, PieceID * setup) {
+int BoardMaker::ithEmptyPosition(int i, PieceID * setup[8]) {
 	for (int n = 0; n < 6; n++) {
 
-		if (setup[n] == 0) {
+		if (setup[n] == NULL) {
 			i--;
 		}
 

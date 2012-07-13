@@ -13,7 +13,7 @@ namespace OhWordC {
 class SecureRandom {
 public:
 	SecureRandom(int*);
-	long nextLong();
+	__int64 nextLong();
 	virtual ~SecureRandom();
 };
 

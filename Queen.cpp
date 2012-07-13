@@ -7,6 +7,9 @@
 
 #include "stdafx.h"
 namespace OhWordC {
+	
+int Queen::QUEENMOVES [2][8]= { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
+
 Queen::Queen() {
 	// TODO Auto-generated constructor stub
 
@@ -24,7 +27,7 @@ string Queen::getStringID() {
 	return "Q";
 }
 
-void Queen::generateMoves(Piece* p, Board* board, vector<long> moves) {
+void Queen::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -57,7 +60,7 @@ void Queen::generateMoves(Piece* p, Board* board, vector<long> moves) {
 	}
 }
 
-vector<long> Queen::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<__int64> Queen::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -101,7 +104,7 @@ vector<long> Queen::generateValidMoves(Piece* p, Board* board, long* nullMoveInf
 					value -= Values::QUEEN_VALUE >> 1;
 				}
 
-				long moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
+				__int64 moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
 				validMoves.push_back(moveLong);
 			}
 		}
@@ -113,17 +116,17 @@ vector<long> Queen::generateValidMoves(Piece* p, Board* board, long* nullMoveInf
 
 }
 
-void getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors,
-		long friendly) {
+void Queen::getNullMoveInfo(Piece* piece, Board* board, __int64* nullMoveInfo, __int64 updown, __int64 left, __int64 right, __int64 kingBitBoard, __int64 kingCheckVectors,
+		__int64 friendly) {
 
-	long bitPiece = piece->getBit();
+	__int64 bitPiece = piece->getBit();
 
 	// up ------------------------------------------------------------
-	unsigned long temp = bitPiece;
-	unsigned long temp2 = bitPiece;
+	unsigned __int64 temp = bitPiece;
+	unsigned __int64 temp2 = bitPiece;
 	int r = piece->getRow();
 	int c = piece->getCol();
-	long attackVector = 0;
+	__int64 attackVector = 0;
 
 	while ((temp2 = (temp2 >> 8 & updown)) != 0) {
 		attackVector |= temp2;
@@ -385,9 +388,9 @@ void getNullMoveInfo(Piece* piece, Board* board, long* nullMoveInfo, long updown
 
 }
 
-void Queen::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
-	long bitAttackVector = 0;
-	long bitAttackCompliment = 0;
+void Queen::getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo) {
+	__int64 bitAttackVector = 0;
+	__int64 bitAttackCompliment = 0;
 	bool inCheck = false;
 	Piece * blockingPiece;
 
@@ -398,7 +401,7 @@ void Queen::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 	PositionStatus pieceStatus;
 	side_t player = p->getSide();
 
-	long bitPosition = p->getBit();
+	__int64 bitPosition = p->getBit();
 
 	int i = 1;
 	for (int d = 0; d < 8; d++) {

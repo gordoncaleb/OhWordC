@@ -33,7 +33,7 @@ int Piece::getCol() {
 	return col;
 }
 
-unsigned long Piece::getBit() {
+unsigned __int64 Piece::getBit() {
 	return BitBoard::getMask(row, col);
 }
 
@@ -42,12 +42,12 @@ void Piece::setPos(int row, int col) {
 	this->col = col;
 }
 
-void Piece::move(long newMove) {
+void Piece::move(__int64 newMove) {
 	setPos(Move::getToRow(newMove), Move::getToCol(newMove));
 	moved = true;
 }
 
-void Piece::reverseMove(long newMove) {
+void Piece::reverseMove(__int64 newMove) {
 	setPos(Move::getFromRow(newMove), Move::getFromCol(newMove));
 }
 
@@ -63,7 +63,7 @@ void Piece::setMoved(bool moved) {
 	this->moved = moved;
 }
 
-void Piece::setBlockingVector(long blockingVector) {
+void Piece::setBlockingVector(__int64 blockingVector) {
 	this->blockingVector = blockingVector;
 }
 
@@ -71,7 +71,7 @@ void Piece::clearBlocking() {
 	blockingVector = -1;
 }
 
-long Piece::getBlockingVector() {
+__int64 Piece::getBlockingVector() {
 	return blockingVector;
 }
 
@@ -119,8 +119,8 @@ bool Piece::equals(Piece * piece) {
 	}
 }
 
-bool Piece::isValidMove(int toRow, int toCol, long * nullMoveInfo) {
-	long mask = BitBoard::getMask(toRow, toCol);
+bool Piece::isValidMove(int toRow, int toCol, __int64 * nullMoveInfo) {
+	__int64 mask = BitBoard::getMask(toRow, toCol);
 
 	if ((mask & nullMoveInfo[1] & blockingVector) != 0) {
 		return true;
@@ -137,7 +137,7 @@ void Piece::setPieceID(PieceID id) {
 	this->id = id;
 }
 
-void Piece::generateValidMoves(Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+void Piece::generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
 
 	switch (id) {
 	case ROOK:
@@ -164,7 +164,7 @@ void Piece::generateValidMoves(Board* board, long* nullMoveInfo, long* posBitBoa
 
 }
 
-void Piece::getNullMoveInfo(Board* board, long* nullMoveInfo, long updown, long left, long right, long kingBitBoard, long kingCheckVectors, long friendly) {
+void Piece::getNullMoveInfo(Board* board, __int64* nullMoveInfo, __int64 updown, __int64 left, __int64 right, __int64 kingBitBoard, __int64 kingCheckVectors, __int64 friendly) {
 	switch (id) {
 	case ROOK:
 		Rook::getNullMoveInfo(this, board, nullMoveInfo, updown, left, right, kingBitBoard, kingCheckVectors, friendly);
@@ -187,7 +187,7 @@ void Piece::getNullMoveInfo(Board* board, long* nullMoveInfo, long updown, long 
 	}
 }
 
-void Piece::getNullMoveInfo(Board* board, long* nullMoveBitBoards) {
+void Piece::getNullMoveInfo(Board* board, __int64* nullMoveBitBoards) {
 	switch (id) {
 	case ROOK:
 		Rook::getNullMoveInfo(this, board, nullMoveBitBoards);

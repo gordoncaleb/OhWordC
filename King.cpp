@@ -8,6 +8,9 @@
 #include "stdafx.h"
 
 namespace OhWordC {
+
+int King::KINGMOVES[2][8] = { { 1, 1, -1, -1, 1, -1, 0, 0 }, { 1, -1, 1, -1, 0, 0, 1, -1 } };
+
 King::King() {
 	// TODO Auto-generated constructor stub
 
@@ -25,7 +28,7 @@ string King::getStringID() {
 	return "K";
 }
 
-void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
+void King::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -53,7 +56,7 @@ void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
 
 	}
 
-	// long allPosBitBoard = posBitBoard[0] | posBitBoard[1];
+	// __int64 allPosBitBoard = posBitBoard[0] | posBitBoard[1];
 	//
 	// if (!board.isInCheck()) {
 	// // add possible castle move
@@ -87,14 +90,14 @@ void King::generateMoves(Piece* p, Board* board, vector<long> moves) {
 	// }
 }
 
-vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
 	int nextRow;
 	int nextCol;
 	PositionStatus pieceStatus;
-	long moveLong;
+	__int64 moveLong;
 
 	for (int d = 0; d < 8; d++) {
 		nextRow = currentRow + KINGMOVES[0][d];
@@ -126,7 +129,7 @@ vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo
 
 	}
 
-	long allPosBitBoard = posBitBoard[0] | posBitBoard[1];
+	__int64 allPosBitBoard = posBitBoard[0] | posBitBoard[1];
 
 	if (!board->isInCheck()) {
 		// add possible castle move
@@ -157,7 +160,7 @@ vector<long> King::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo
 
 }
 
-void King::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void King::getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
@@ -170,10 +173,10 @@ void King::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
 
 }
 
-long King::getKingCheckVectors(long king, long updown, long left, long right){
-	unsigned long temp = king;
+__int64 King::getKingCheckVectors(__int64 king, __int64 updown, __int64 left, __int64 right){
+	unsigned __int64 temp = king;
 
-	unsigned long checkVectors = king;
+	unsigned __int64 checkVectors = king;
 
 	// up
 	while ((temp = (temp >> 8 & updown)) != 0) {
@@ -236,8 +239,8 @@ long King::getKingCheckVectors(long king, long updown, long left, long right){
 	return checkVectors;
 }
 
-bool King::isValidMove(int toRow, int toCol, long* nullMoveInfo) {
-	long mask = BitBoard::getMask(toRow, toCol);
+bool King::isValidMove(int toRow, int toCol, __int64* nullMoveInfo) {
+	__int64 mask = BitBoard::getMask(toRow, toCol);
 
 	// String nullmove0 = BitBoard.printBitBoard(nullMoveInfo[0]);
 	// String nullmove1 = BitBoard.printBitBoard(nullMoveInfo[1]);
@@ -250,16 +253,16 @@ bool King::isValidMove(int toRow, int toCol, long* nullMoveInfo) {
 	}
 }
 
-bool King::canCastleFar(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
+bool King::canCastleFar(Piece* king, Board* board, side_t player, __int64* nullMoveInfo, __int64 allPosBitBoard) {
 
 	if (board->kingHasMoved(player) || board->farRookHasMoved(player)) {
 		return false;
 	}
 
-	long kingToCastleMask = BitBoard::getCastleMask(king->getCol(), 2, player);
+	__int64 kingToCastleMask = BitBoard::getCastleMask(king->getCol(), 2, player);
 
 	int rookCol = board->getRookStartingCol(player, 0);
-	long rookToCastleMask = BitBoard::getCastleMask(rookCol, 3, player);
+	__int64 rookToCastleMask = BitBoard::getCastleMask(rookCol, 3, player);
 
 	allPosBitBoard ^= BitBoard::getMask(king->getRow(), rookCol) | king->getBit();
 
@@ -273,16 +276,16 @@ bool King::canCastleFar(Piece* king, Board* board, side_t player, long* nullMove
 
 }
 
-bool King::canCastleNear(Piece* king, Board* board, side_t player, long* nullMoveInfo, long allPosBitBoard) {
+bool King::canCastleNear(Piece* king, Board* board, side_t player, __int64* nullMoveInfo, __int64 allPosBitBoard) {
 
 	if (board->kingHasMoved(player) || board->nearRookHasMoved(player)) {
 		return false;
 	}
 
-	long kingToCastleMask = BitBoard::getCastleMask(king->getCol(), 6, player);
+	__int64 kingToCastleMask = BitBoard::getCastleMask(king->getCol(), 6, player);
 
 	int rookCol = board->getRookStartingCol(player, 1);
-	long rookToCastleMask = BitBoard::getCastleMask(rookCol, 5, player);
+	__int64 rookToCastleMask = BitBoard::getCastleMask(rookCol, 5, player);
 
 	allPosBitBoard ^= BitBoard::getMask(king->getRow(), rookCol) | king->getBit();
 

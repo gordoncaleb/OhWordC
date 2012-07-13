@@ -11,7 +11,7 @@
 namespace OhWordC {
 
 enum side_t {
-	BLACK = 1, WHITE = 2, NOONE = 4, BOTH = 8
+	BLACK = 0, WHITE = 1, NOONE = 2, BOTH = 4
 };
 
 class Side {

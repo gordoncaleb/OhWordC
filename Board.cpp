@@ -25,10 +25,10 @@ Board::Board() {
 	piecesTaken[BLACK] = new vector<Piece*>();
 
 	//this->moveHistory = new vector<Move>();
-	//this->hashCodeHistory = new vector<long>();
+	//this->hashCodeHistory = new vector<__int64>();
 	rngTable = RNGTable::getSingleton();
 	turn = WHITE;
-	//this->nullMoveInfo = new long[3];
+	//this->nullMoveInfo = new __int64[3];
 
 	kings[BLACK] = new Piece(KING, BLACK, -1, -1, false);
 	kings[WHITE] = new Piece(KING, WHITE, -1, -1, false);
@@ -42,11 +42,11 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 
 	for (int r = 0; r < 8; r++) {
 		for (int c = 0; c < 8; c++) {
-			board[8][8] = (Piece *) 0;
+			board[r][c] = (Piece *) 0;
 		}
 	}
 
-	//this->validMoves = new vector<long>(100);
+	//this->validMoves = new vector<__int64>(100);
 	//this->pieces = new vector[2];
 	//this->piecesTaken = new vector[2];
 	//this->kings = new Piece[2];
@@ -56,27 +56,29 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 	nullMoveInfo[0] = 0;
 	nullMoveInfo[1] = -1;
 	nullMoveInfo[2] = 0;
-	//this->posBitBoard [6][2] = new long[6][2];
-	//this->allPosBitBoard [2] = new long[2];
+	//this->posBitBoard [6][2] = new __int64[6][2];
+	//this->allPosBitBoard [2] = new __int64[2];
 
 	//board = new Piece[8][8];
-	pieces[WHITE] = new vector<Piece*>();
-	pieces[BLACK] = new vector<Piece*>();
+	this->pieces[WHITE] = new vector<Piece*>();
+	this->pieces[BLACK] = new vector<Piece*>();
 
 	piecesTaken[WHITE] = new vector<Piece*>();
 	piecesTaken[BLACK] = new vector<Piece*>();
 
+	printf("6");
+
 	//this->moveHistory = new vector<Move>();
-	//this->hashCodeHistory = new stack<long>();
+	//this->hashCodeHistory = new stack<__int64>();
 	rngTable = RNGTable::getSingleton();
 	this->turn = turn;
-	//this->nullMoveInfo = new long[3];
+	//this->nullMoveInfo = new __int64[3];
 
-	//long** posBitBoard = new long[6][2];
-	// long[] pawnPosBitboard = { 0, 0 };
-	// long[] kingPosBitboard = { 0, 0 };
-
-	int* pawnRow = new int[2];
+	//__int64** posBitBoard = new __int64[6][2];
+	// __int64[] pawnPosBitboard = { 0, 0 };
+	// __int64[] kingPosBitboard = { 0, 0 };
+	printf("7");
+	int pawnRow[2];
 	pawnRow[BLACK] = 1;
 	pawnRow[WHITE] = 6;
 
@@ -86,12 +88,16 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 
 		for (int p = 0; p < (int) pieces[i]->size(); p++) {
 			temp = pieces[i]->at(p)->getCopy();
-
+			
 			pieces[i]->push_back(temp);
-
+			
+			printf("temp=(%d,%d) id=%d\n",temp->getRow(),temp->getCol(),temp->getPieceID());
 			board[temp->getRow()][temp->getCol()] = temp;
+			printf("7.75\n");
 
 			posBitBoard[temp->getPieceID()][i] |= temp->getBit();
+
+			
 
 			if (temp->getPieceID() == PAWN) {
 
@@ -112,6 +118,8 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 
 	}
 
+	printf("8");
+
 	//this->posBitBoard = posBitBoard;
 
 	for (int i = 0; i < 6; i++) {
@@ -122,7 +130,7 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 	this->hashCode = generateHashCode();
 
 	if (moveHistory->size() > 0) {
-		long move;
+		__int64 move;
 		side_t moveSide;
 		if (moveHistory->size() % 2 == 0) {
 			moveSide = turn;
@@ -149,6 +157,8 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 		loadPiecesTaken();
 	}
 
+	printf("9");
+
 	if (kingCols == 0 || rookStartCols == 0) {
 		initializeCastleSetup();
 	} else {
@@ -160,10 +170,12 @@ Board::Board(vector<Piece*>* pieces[2], side_t turn, vector<Move*> * moveHistory
 		this->rookStartCols[1][1] = rookStartCols[1][1];
 	}
 
+	printf("10");
+
 // this.castleRights = castleRights;
 }
 
-bool Board::makeMove(long move) {
+bool Board::makeMove(__int64 move) {
 
 	int fromRow = Move::getFromRow(move);
 	int fromCol = Move::getFromCol(move);
@@ -278,7 +290,7 @@ bool Board::makeMove(long move) {
 
 void Board::movePiece(Piece * pieceMoving, int toRow, int toCol, MoveNote note) {
 
-	long bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(toRow, toCol);
+	__int64 bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(toRow, toCol);
 
 // remove bit position from where piece was and add where it is now
 	posBitBoard[pieceMoving->getPieceID()][pieceMoving->getSide()] ^= bitMove;
@@ -310,7 +322,7 @@ void Board::movePiece(Piece * pieceMoving, int toRow, int toCol, MoveNote note) 
 	hashCode ^= rngTable->getPiecePerSquareRandom(turn, pieceMoving->getPieceID(), toRow, toCol);
 }
 
-long Board::undoMove() {
+__int64 Board::undoMove() {
 
 // if no there is no last move then undoMove is impossible
 	if (moveHistory->empty()) {
@@ -319,7 +331,7 @@ long Board::undoMove() {
 	}
 
 // retrieve last move made
-	long lastMove = getLastMoveMade();
+	__int64 lastMove = getLastMoveMade();
 
 	int fromRow = Move::getFromRow(lastMove);
 	int fromCol = Move::getFromCol(lastMove);
@@ -399,7 +411,7 @@ long Board::undoMove() {
 
 void Board::undoMovePiece(Piece* pieceMoving, int fromRow, int fromCol, MoveNote note, bool hadMoved) {
 
-	long bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(fromRow, fromCol);
+	__int64 bitMove = BitBoard::getMask(pieceMoving->getRow(), pieceMoving->getCol()) ^ BitBoard::getMask(fromRow, fromCol);
 
 // remove bit position from where piece was and add where it is now
 	posBitBoard[pieceMoving->getPieceID()][pieceMoving->getSide()] ^= bitMove;
@@ -428,7 +440,7 @@ void Board::verifyBitBoards() {
 
 	Piece * piece;
 
-	long allBitBoard[6][2];
+	__int64 allBitBoard[6][2];
 
 	for (int i = 0; i < 6; i++) {
 		allBitBoard[i][0] = posBitBoard[i][0];
@@ -462,12 +474,12 @@ bool Board::canUndo() {
 	return (moveHistory->size() != 0);
 }
 
-vector<long> Board::generateValidMoves() {
+vector<__int64> Board::generateValidMoves() {
 
-	return generateValidMoves(false, 0, (long*) 0);
+	return generateValidMoves(false, 0, (__int64*) 0);
 }
 
-vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMoves) {
+vector<__int64> Board::generateValidMoves(bool sort, __int64 hashMove, __int64* killerMoves) {
 
 // find in check details. i.e. left and right castle info
 // makeNullMove();
@@ -478,7 +490,7 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 // System.out.println("in check vector");
 // BitBoard.printBitBoard(nullMoveInfo[1]);
 
-// ArrayList<Long> validMoves = new ArrayList<Long>(50);
+// ArrayList<__int64> validMoves = new ArrayList<__int64>(50);
 	validMoves.clear();
 
 	if (!hasSufficientMaterial() || drawByThreeRule()) {
@@ -488,7 +500,7 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 
 	int prevMovesSize = 0;
 
-	long move;
+	__int64 move;
 	for (int p = 0; p < (int) pieces[turn]->size(); p++) {
 
 		pieces[turn]->at(p)->generateValidMoves(this, nullMoveInfo, allPosBitBoard, validMoves);
@@ -534,10 +546,10 @@ vector<long> Board::generateValidMoves(bool sort, long hashMove, long* killerMov
 	return validMoves;
 }
 
-long* Board::makeNullMove() {
-// long nullMoveAttacks = 0;
-// long inCheckVector = BitBoard.ALL_ONES;
-// long bitAttackCompliment = 0;
+__int64* Board::makeNullMove() {
+// __int64 nullMoveAttacks = 0;
+// __int64 inCheckVector = BitBoard.ALL_ONES;
+// __int64 bitAttackCompliment = 0;
 //
 // nullMoveInfo[0] = nullMoveAttacks;
 // nullMoveInfo[1] = inCheckVector;
@@ -564,9 +576,9 @@ long* Board::makeNullMove() {
 
 	nullMoveInfo[2] = 0;
 
-	long updown = ~(allPosBitBoard[0] | allPosBitBoard[1]);
-	long left = 0xFEFEFEFEFEFEFEFEL & updown;
-	long right = 0x7F7F7F7F7F7F7F7FL & updown;
+	__int64 updown = ~(allPosBitBoard[0] | allPosBitBoard[1]);
+	__int64 left = 0xFEFEFEFEFEFEFEFEL & updown;
+	__int64 right = 0x7F7F7F7F7F7F7F7FL & updown;
 
 	for (int p = 0; p < (int) pieces[Side::otherSide(turn)]->size(); p++) {
 
@@ -604,7 +616,7 @@ PositionStatus Board::checkPiece(int row, int col, side_t player) {
 
 }
 
-long Board::getLastMoveMade() {
+__int64 Board::getLastMoveMade() {
 	if (!moveHistory->empty()) {
 		return moveHistory->back()->getMoveLong();
 	} else {
@@ -753,8 +765,8 @@ int Board::castleScore(side_t side) {
 
 int Board::pawnStructureScore(side_t side, int phase) {
 
-	long pawns = posBitBoard[PAWN][side];
-	long otherPawns = posBitBoard[PAWN][Side::otherSide(side)];
+	__int64 pawns = posBitBoard[PAWN][side];
+	__int64 otherPawns = posBitBoard[PAWN][Side::otherSide(side)];
 
 	int occupiedCol = 0;
 	int passedPawns = 0;
@@ -1029,11 +1041,11 @@ bool Board::kingHasMoved(side_t player) {
 	return kings[player]->hasMoved();
 }
 
-long Board::farCastleMask(side_t player) {
+__int64 Board::farCastleMask(side_t player) {
 	return BitBoard::getCastleMask(Math::min(rookStartCols[player][0], 2), kings[player]->getCol(), player);
 }
 
-long Board::nearCastleMask(side_t player) {
+__int64 Board::nearCastleMask(side_t player) {
 	return BitBoard::getCastleMask(kings[player]->getCol(), Math::max(rookStartCols[player][1], 6), player);
 }
 
@@ -1064,7 +1076,7 @@ Board * Board::getCopy() {
 //					pieceDetails |= 1;
 //				}
 //
-//				long lastMove = getLastMoveMade();
+//				__int64 lastMove = getLastMoveMade();
 //
 //				if (getLastMoveMade() != 0) {
 //					if (Move::getToRow(lastMove) == row && Move::getToCol(lastMove) == col && Move::getNote(lastMove) == MoveNote::PAWN_LEAP) {
@@ -1092,7 +1104,7 @@ Board * Board::getCopy() {
 //	if (includeHistory) {
 //
 //		vector<Move> movesToRedo = new vector<Move>();
-//		long m;
+//		__int64 m;
 //		while ((m = undoMove()) != 0) {
 //			movesToRedo.push_back(*(new Move(m)));
 //		}
@@ -1117,8 +1129,8 @@ Board * Board::getCopy() {
 //	return xmlBoard;
 //}
 
-long Board::generateHashCode() {
-	long hashCode = 0;
+__int64 Board::generateHashCode() {
+	__int64 hashCode = 0;
 
 	if (turn == BLACK) {
 		hashCode = rngTable->getBlackToMoveRandom();
@@ -1150,11 +1162,11 @@ long Board::generateHashCode() {
 //	return (int) (hashCode & AISettings.hashIndexMask);
 //}
 
-long Board::getHashCode() {
+__int64 Board::getHashCode() {
 	return hashCode;
 }
 
-//static long Board::getHashCode(string xmlBoard) {
+//static __int64 Board::getHashCode(string xmlBoard) {
 //	Board board = XMLParser.XMLToBoard(xmlBoard);
 //
 //	if (board != 0) {

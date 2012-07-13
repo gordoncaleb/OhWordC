@@ -23,7 +23,7 @@ class Piece {
 	int col;
 	side_t player;
 	bool moved;
-	long blockingVector;
+	__int64 blockingVector;
 	PieceID id;
 
 public:
@@ -32,24 +32,24 @@ public:
 	int getRow();
 	int getCol();
 	virtual ~Piece();
-	unsigned long getBit();
+	unsigned __int64 getBit();
 	void setPos(int row, int col);
-	void move(long newMove);
-	void reverseMove(long newMove);
+	void move(__int64 newMove);
+	void reverseMove(__int64 newMove);
 	side_t getSide();
 	bool hasMoved();
 	void setMoved(bool moved);
-	void setBlockingVector(long blockingVector);
+	void setBlockingVector(__int64 blockingVector);
 	void clearBlocking();
-	long getBlockingVector();
+	__int64 getBlockingVector();
 	static PieceID charIDtoPieceID(char type);
 	bool equals(Piece * piece);
-	bool isValidMove(int, int, long[]);
+	bool isValidMove(int, int, __int64[]);
 	PieceID getPieceID();
 	void setPieceID(PieceID id);
-	void generateValidMoves(Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves);
-	void getNullMoveInfo(Board*, long*, long, long, long, long, long, long);
-	void getNullMoveInfo(Board*, long*);
+	void generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves);
+	void getNullMoveInfo(Board*, __int64*, __int64, __int64, __int64, __int64, __int64, __int64);
+	void getNullMoveInfo(Board*, __int64*);
 	Piece * getCopy();
 };
 }

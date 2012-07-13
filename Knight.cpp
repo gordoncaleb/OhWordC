@@ -7,6 +7,9 @@
 
 #include "stdafx.h"
 namespace OhWordC {
+
+int Knight::KNIGHTMOVES [2][8] = { { 2, 2, -2, -2, 1, -1, 1, -1 }, { 1, -1, 1, -1, 2, 2, -2, -2 } };
+
 Knight::Knight() {
 	// TODO Auto-generated constructor stub
 
@@ -23,7 +26,7 @@ string Knight::getStringID() {
 	return "N";
 }
 
-vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nullMoveInfo, long* posBitBoard, vector<long> validMoves) {
+vector<__int64> Knight::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -33,7 +36,7 @@ vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nullMoveIn
 	int myValue = board->getPieceValue(p->getRow(), p->getCol());
 	PositionStatus pieceStatus;
 	side_t player = p->getSide();
-	long moveLong;
+	__int64 moveLong;
 
 	for (int i = 0; i < 8; i++) {
 		nextRow = currentRow + KNIGHTMOVES[0][i];
@@ -79,7 +82,7 @@ vector<long> Knight::generateValidMoves(Piece* p, Board* board, long* nullMoveIn
 
 }
 
-void Knight::getNullMoveInfo(Piece* p, Board* board, long* nullMoveInfo) {
+void Knight::getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
