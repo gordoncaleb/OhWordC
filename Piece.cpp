@@ -75,6 +75,36 @@ __int64 Piece::getBlockingVector() {
 	return blockingVector;
 }
 
+string Piece::toString() {
+	string id;
+
+	if (this->getSide() == BLACK) {
+		id = this->getCharID();
+	} else {
+		id = this->getCharID() + 32;
+	}
+
+	return id;
+}
+
+string Piece::toXML() {
+
+	string hasMoved;
+
+	if(this->hasMoved()){
+		hasMoved = "true";
+	}else{
+		hasMoved = "false";
+	}
+
+	char buf[500];
+	sprintf_s(buf,"<piece>\n<id>%s</id>\n<has_moved>%s</has_moved>\n<position>%d,%d</position>\n</piece>\n",this->toString().c_str(),hasMoved.c_str(),this->getRow(),this->getCol());
+
+	string xmlPiece(buf);
+
+	return xmlPiece;
+}
+
 PieceID Piece::charIDtoPieceID(char type) {
 
 	PieceID id;
@@ -129,6 +159,32 @@ bool Piece::isValidMove(int toRow, int toCol, __int64 * nullMoveInfo) {
 	}
 }
 
+char Piece::getCharID() {
+	switch (id) {
+	case ROOK:
+		return Rook::getStringID().c_str()[0];
+		break;
+	case KNIGHT:
+		return Knight::getStringID().c_str()[0];
+		break;
+	case BISHOP:
+		return Bishop::getStringID().c_str()[0];
+		break;
+	case QUEEN:
+		return Queen::getStringID().c_str()[0];
+		break;
+	case KING:
+		return King::getStringID().c_str()[0];
+		break;
+	case PAWN:
+		return Pawn::getStringID().c_str()[0];
+		break;
+	default:
+		return '0';
+	}
+
+}
+
 PieceID Piece::getPieceID() {
 	return id;
 }
@@ -137,7 +193,7 @@ void Piece::setPieceID(PieceID id) {
 	this->id = id;
 }
 
-void Piece::generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+void Piece::generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> * validMoves) {
 
 	switch (id) {
 	case ROOK:

@@ -26,7 +26,7 @@ string Bishop::getStringID() {
 	return "B";
 }
 
-void Bishop::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
+void Bishop::generateMoves(Piece* p, Board* board, vector<__int64> * moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -45,7 +45,7 @@ void Bishop::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 		while (pieceStatus == NO_PIECE) {
 
 			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, 0, NONE);
-			moves.push_back(moveLong);
+			moves->push_back(moveLong);
 
 			i++;
 			nextRow = currentRow + i * BISHOPMOVES[0][d];
@@ -57,14 +57,14 @@ void Bishop::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 		if (pieceStatus == ENEMY) {
 			value = board->getPieceValue(nextRow, nextCol);
 			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
-			moves.push_back(moveLong);
+			moves->push_back(moveLong);
 		}
 
 		i = 1;
 	}
 }
 
-vector<__int64> Bishop::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64> * Bishop::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64>* validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -92,7 +92,7 @@ vector<__int64> Bishop::generateValidMoves(Piece* p, Board* board, __int64* null
 
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE);
 
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 
 			i++;
@@ -111,7 +111,7 @@ vector<__int64> Bishop::generateValidMoves(Piece* p, Board* board, __int64* null
 				}
 
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 		}
 

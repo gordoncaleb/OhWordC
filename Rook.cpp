@@ -27,7 +27,7 @@ string Rook::getStringID() {
 	return "R";
 }
 
-void Rook::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
+void Rook::generateMoves(Piece* p, Board* board, vector<__int64>* moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -53,7 +53,7 @@ void Rook::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 
 			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value);
 
-			moves.push_back(moveLong);
+			moves->push_back(moveLong);
 
 			i++;
 			nextRow = currentRow + i * ROOKMOVES[0][d];
@@ -72,7 +72,7 @@ void Rook::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 
 			moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
 
-			moves.push_back(moveLong);
+			moves->push_back(moveLong);
 
 		}
 
@@ -81,7 +81,7 @@ void Rook::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 
 }
 
-vector<__int64> Rook::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64>* Rook::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64>* validMoves) {
 
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
@@ -114,7 +114,7 @@ vector<__int64> Rook::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value);
 
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 
 			i++;
@@ -139,7 +139,7 @@ vector<__int64> Rook::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
 
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 		}
 

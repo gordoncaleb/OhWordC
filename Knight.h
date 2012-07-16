@@ -17,7 +17,7 @@ public:
 	static PieceID getPieceID();
 	static string getName();
 	static string getStringID();
-	static vector<__int64> generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) ;
+	static vector<__int64>* generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> * validMoves) ;
 	static void getNullMoveInfo(Piece* p, Board* board, __int64* nullMoveInfo);
 	virtual ~Knight();
 };

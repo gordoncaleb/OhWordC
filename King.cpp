@@ -28,7 +28,7 @@ string King::getStringID() {
 	return "K";
 }
 
-void King::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
+void King::generateMoves(Piece* p, Board* board, vector<__int64>* moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -47,11 +47,11 @@ void King::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 		pieceStatus = board->checkPiece(nextRow, nextCol, player);
 
 		if (pieceStatus ==NO_PIECE) {
-			moves.push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, moveVal, NONE));
+			moves->push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, moveVal, NONE));
 		}
 
 		if (pieceStatus == ENEMY) {
-			moves.push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, board->getPieceValue(nextRow, nextCol) + moveVal, NONE, board->getPiece(nextRow, nextCol)));
+			moves->push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, board->getPieceValue(nextRow, nextCol) + moveVal, NONE, board->getPiece(nextRow, nextCol)));
 		}
 
 	}
@@ -90,7 +90,7 @@ void King::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 	// }
 }
 
-vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64> * King::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> * validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -115,7 +115,7 @@ vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 					moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, 0, NONE);
 				}
 
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 		}
 
@@ -123,7 +123,7 @@ vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 			if (isValidMove(nextRow, nextCol, nullMoveInfo)) {
 				moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, board->getPieceValue(nextRow, nextCol), NONE,
 						board->getPiece(nextRow, nextCol));
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 		}
 
@@ -136,9 +136,9 @@ vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 		if (canCastleFar(p, board, player, nullMoveInfo, allPosBitBoard)) {
 			if (isValidMove(currentRow, 2, nullMoveInfo)) {
 				if (currentCol > 3) {
-					validMoves.push_back(Move::moveLong(currentRow, currentCol, currentRow, 2, Values::FAR_CASTLE_VALUE, CASTLE_FAR));
+					validMoves->push_back(Move::moveLong(currentRow, currentCol, currentRow, 2, Values::FAR_CASTLE_VALUE, CASTLE_FAR));
 				} else {
-					validMoves.push_back(Move::moveLong(currentRow, board->getRookStartingCol(player, 0), currentRow, 3, Values::FAR_CASTLE_VALUE,
+					validMoves->push_back(Move::moveLong(currentRow, board->getRookStartingCol(player, 0), currentRow, 3, Values::FAR_CASTLE_VALUE,
 							CASTLE_FAR));
 				}
 			}
@@ -147,9 +147,9 @@ vector<__int64> King::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 		if (canCastleNear(p, board, player, nullMoveInfo, allPosBitBoard)) {
 			if (isValidMove(currentRow, 6, nullMoveInfo)) {
 				if (currentCol < 5) {
-					validMoves.push_back(Move::moveLong(currentRow, currentCol, currentRow, 6, Values::NEAR_CASTLE_VALUE, CASTLE_NEAR));
+					validMoves->push_back(Move::moveLong(currentRow, currentCol, currentRow, 6, Values::NEAR_CASTLE_VALUE, CASTLE_NEAR));
 				} else {
-					validMoves.push_back(Move::moveLong(currentRow, board->getRookStartingCol(player, 1), currentRow, 5, Values::NEAR_CASTLE_VALUE,
+					validMoves->push_back(Move::moveLong(currentRow, board->getRookStartingCol(player, 1), currentRow, 5, Values::NEAR_CASTLE_VALUE,
 		CASTLE_NEAR));
 				}
 			}

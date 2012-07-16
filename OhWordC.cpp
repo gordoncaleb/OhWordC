@@ -11,6 +11,8 @@ int _tmain(int argc, _TCHAR* argv[]){
 
 	printf("Hello world\n");
 
+	//printf(BitBoard::printBitBoard(BitBoard::getMask(7,7)).c_str());
+
 	Perft * p = new Perft();
 
 	printf("Perft made\n");
@@ -27,10 +29,12 @@ int _tmain(int argc, _TCHAR* argv[]){
 
 	time_t t2 = time(NULL);
 
-	printf("Took %dms", (t2 - t1));
+	printf("board after it all \n%s\n",board->toString().c_str());
+
+	printf("Took %dms\n", (t2 - t1));
 
 	for (int i = 0; i < 20; i++) {
-		printf("Level %d:%d",i,p->level[i]);
+		printf("Level %d:%d\n",i,p->level[i]);
 		if (p->level[i] == 0) {
 			break;
 		}

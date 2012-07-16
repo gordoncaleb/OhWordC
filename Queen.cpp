@@ -27,7 +27,7 @@ string Queen::getStringID() {
 	return "Q";
 }
 
-void Queen::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
+void Queen::generateMoves(Piece* p, Board* board, vector<__int64>* moves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -42,7 +42,7 @@ void Queen::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 
 		while (pieceStatus == NO_PIECE) {
 
-			moves.push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, 0, NONE));
+			moves->push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, 0, NONE));
 
 			i++;
 			nextRow = currentRow + i * QUEENMOVES[0][d];
@@ -52,7 +52,7 @@ void Queen::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 		}
 
 		if (pieceStatus == ENEMY) {
-			moves.push_back(
+			moves->push_back(
 					Move::moveLong(currentRow, currentCol, nextRow, nextCol, board->getPieceValue(nextRow, nextCol), NONE, board->getPiece(nextRow, nextCol)));
 		}
 
@@ -60,7 +60,7 @@ void Queen::generateMoves(Piece* p, Board* board, vector<__int64> moves) {
 	}
 }
 
-vector<__int64> Queen::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64>* Queen::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> * validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -85,7 +85,7 @@ vector<__int64> Queen::generateValidMoves(Piece* p, Board* board, __int64* nullM
 					value = 0;
 				}
 
-				validMoves.push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE));
+				validMoves->push_back(Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE));
 			}
 
 			i++;
@@ -105,7 +105,7 @@ vector<__int64> Queen::generateValidMoves(Piece* p, Board* board, __int64* nullM
 				}
 
 				__int64 moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 		}
 

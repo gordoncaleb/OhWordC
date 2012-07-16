@@ -46,6 +46,8 @@ public:
 	static bool equals(__int64 moveLongA, __int64 moveLongB);
 	static bool fromEquals(__int64 moveLongA, __int64 moveLongB);
 	static bool toEquals(__int64 moveLongA, __int64 moveLongB);
+	//string toXML();
+	//static string toXML(__int64 moveLong);
 	__int64 setNote(MoveNote note);
 	static __int64 setNote(__int64 moveLong, MoveNote note);
 	MoveNote getNote();

@@ -26,7 +26,7 @@ string Knight::getStringID() {
 	return "N";
 }
 
-vector<__int64> Knight::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64> * Knight::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64>* validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	int nextRow;
@@ -56,7 +56,7 @@ vector<__int64> Knight::generateValidMoves(Piece* p, Board* board, __int64* null
 					}
 
 					moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value);
-					validMoves.push_back(moveLong);
+					validMoves->push_back(moveLong);
 				}
 			}
 
@@ -71,7 +71,7 @@ vector<__int64> Knight::generateValidMoves(Piece* p, Board* board, __int64* null
 					}
 
 					moveLong = Move::moveLong(currentRow, currentCol, nextRow, nextCol, value, NONE, board->getPiece(nextRow, nextCol));
-					validMoves.push_back(moveLong);
+					validMoves->push_back(moveLong);
 				}
 			}
 

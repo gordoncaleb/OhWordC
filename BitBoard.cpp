@@ -31,7 +31,8 @@ __int64 BitBoard::getCastleMask(int col1, int col2, side_t side) {
 }
 
 __int64 BitBoard::getMask(int row, int col) {
-	return (1ULL << ((row << 3) + col));
+	__int64 one = 1;
+	return (one << ((row << 3) + col));
 }
 
 __int64 BitBoard::getMaskSafe(int row, int col) {

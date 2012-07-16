@@ -24,7 +24,7 @@ string Pawn::getStringID() {
 	return "P";
 }
 
-vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves) {
+vector<__int64>* Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64>* validMoves) {
 	int currentRow = p->getRow();
 	int currentCol = p->getCol();
 	side_t player = p->getSide();
@@ -68,7 +68,7 @@ vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 
 			moveLong = Move::setValue(moveLong, value);
 
-			validMoves.push_back(moveLong);
+			validMoves->push_back(moveLong);
 
 		}
 
@@ -82,7 +82,7 @@ vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 					value = -myValue >> 1;
 				}
 
-				validMoves.push_back(Move::moveLong(currentRow, currentCol, currentRow + 2 * dir, currentCol, value, PAWN_LEAP));
+				validMoves->push_back(Move::moveLong(currentRow, currentCol, currentRow + 2 * dir, currentCol, value, PAWN_LEAP));
 
 			}
 		}
@@ -113,7 +113,7 @@ vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 				moveLong = Move::setValue(moveLong, value);
 
 				moveLong = Move::setPieceTaken(moveLong, board->getPiece(currentRow + dir, currentCol + lr[i]));
-				validMoves.push_back(moveLong);
+				validMoves->push_back(moveLong);
 			}
 
 		}
@@ -136,7 +136,7 @@ vector<__int64> Pawn::generateValidMoves(Piece* p, Board* board, __int64* nullMo
 
 						moveLong = Move::moveLong(currentRow, currentCol, currentRow + dir, currentCol + lr[i], value, ENPASSANT,
 								board->getPiece(fifthRank, currentCol + lr[i]));
-						validMoves.push_back(moveLong);
+						validMoves->push_back(moveLong);
 					}
 
 				}

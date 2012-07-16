@@ -13,7 +13,7 @@ using namespace std;
 namespace OhWordC {
 
 enum PieceID {
-	ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
+	EMPTY=-1, ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN
 };
 
 class Board;
@@ -42,12 +42,15 @@ public:
 	void setBlockingVector(__int64 blockingVector);
 	void clearBlocking();
 	__int64 getBlockingVector();
+	string toString();
+	string toXML();
 	static PieceID charIDtoPieceID(char type);
 	bool equals(Piece * piece);
 	bool isValidMove(int, int, __int64[]);
+	char getCharID();
 	PieceID getPieceID();
 	void setPieceID(PieceID id);
-	void generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> validMoves);
+	void generateValidMoves(Board* board, __int64* nullMoveInfo, __int64* posBitBoard, vector<__int64> * validMoves);
 	void getNullMoveInfo(Board*, __int64*, __int64, __int64, __int64, __int64, __int64, __int64);
 	void getNullMoveInfo(Board*, __int64*);
 	Piece * getCopy();

@@ -116,6 +116,37 @@ bool Move::toEquals(__int64 moveLongA, __int64 moveLongB) {
 		return false;
 }
 
+//string Move::toXML() {
+//	return Move::toXML(moveLong);
+//}
+//
+//string Move::toXML(__int64 moveLong) {
+//
+//	string xmlMove = "";
+//
+//	xmlMove += "<move>\n";
+//
+//	xmlMove += "<from>" + getFromRow(moveLong) + "," + getFromCol(moveLong) + "</from>\n";
+//	xmlMove += "<to>" + getToRow(moveLong) + "," + getToCol(moveLong) + "</to>\n";
+//
+//	if (hadMoved(moveLong)) {
+//		xmlMove += "<had_moved>" + hadMoved(moveLong) + "</had_moved>\n";
+//	}
+//
+//	MoveNote note = getNote(moveLong);
+//	if (note != MoveNote.NONE) {
+//		xmlMove += "<note>" + note.toString() + "</note>\n";
+//	}
+//
+//	if (hasPieceTaken(moveLong)) {
+//		xmlMove += new Piece(getPieceTakenID(moveLong), NULL, getPieceTakenRow(moveLong), getPieceTakenCol(moveLong),getPieceTakenHasMoved(moveLong)).toXML();
+//	}
+//
+//	xmlMove += "</move>\n";
+//
+//	return xmlMove;
+//}
+
 __int64 Move::setNote(MoveNote note) {
 	this->move &= notNoteMask;
 	this->move |= (note << 12);

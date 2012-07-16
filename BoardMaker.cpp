@@ -49,49 +49,44 @@ Board* BoardMaker::makeBoard(int r1, int r2, int r3, int r4, int r5) {
 		}
 	}
 
-	printf("2");
 
-	PieceID * setup[8] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+	PieceID setup[8] = {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY};
 
-	*setup[r1 * 2] = BISHOP;
-	*setup[r2 * 2 + 1] = BISHOP;
+	setup[r1 * 2] = BISHOP;
+	setup[r2 * 2 + 1] = BISHOP;
 
-	printf("2.5");
-	*setup[ithEmptyPosition(r3 + 1, setup)] = QUEEN;
+	setup[ithEmptyPosition(r3 + 1, setup)] = QUEEN;
 
-	*setup[ithEmptyPosition(r4 + 1, setup)] = KNIGHT;
-	*setup[ithEmptyPosition(r5 + 1, setup)] = KNIGHT;
+	setup[ithEmptyPosition(r4 + 1, setup)] = KNIGHT;
+	setup[ithEmptyPosition(r5 + 1, setup)] = KNIGHT;
 
-	printf("2.75");
-	*setup[ithEmptyPosition(2, setup)] = KING;
+	setup[ithEmptyPosition(2, setup)] = KING;
 
-	*setup[ithEmptyPosition(1, setup)] = ROOK;
-	*setup[ithEmptyPosition(1, setup)] = ROOK;
+	setup[ithEmptyPosition(1, setup)] = ROOK;
+	setup[ithEmptyPosition(1, setup)] = ROOK;
 
 
-	printf("3");
 	for (int s = 0; s < 2; s++) {
 		for (int p = 0; p < 8; p++) {
-			printf("putting piece (%d) at (%d,%d)\n",setup[p],mainRow[s],p);
+			//printf("putting piece (%d) at (%d,%d)\n",setup[p],mainRow[s],p);
 
-			temp = new Piece(*setup[p], (side_t) s, mainRow[s], p, false);
+			temp = new Piece(setup[p], (side_t) s, mainRow[s], p, false);
 			pieces[s]->push_back(temp);
 		}
 	}
 
-	printf("4");
-
 	Board * board = new Board(pieces, (side_t) WHITE, new vector<Move*>(), (int (*)[2]) 0, (int *) 0);
 
-	printf("5");
+	printf("Board made:\n");
+	printf(board->toString().c_str());
 
 	return board;
 }
 
-int BoardMaker::ithEmptyPosition(int i, PieceID * setup[8]) {
-	for (int n = 0; n < 6; n++) {
+int BoardMaker::ithEmptyPosition(int i, PieceID setup[8]) {
+	for (int n = 0; n < 8; n++) {
 
-		if (setup[n] == NULL) {
+		if (setup[n] == EMPTY) {
 			i--;
 		}
 
